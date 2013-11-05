@@ -35,7 +35,11 @@
 #define __CONTIKI_VERSION__
 
 #ifndef CONTIKI_VERSION_STRING
+<<<<<<< 0eab95ec4c73592cb39cc05683df33f9c1a694ad
 #define CONTIKI_VERSION_STRING "Contiki 3.x"
+=======
+#define CONTIKI_VERSION_STRING "Contiki 2.7"
+>>>>>>> Bumped the version number from Contiki 2.6 to Contiki 2.7
 #endif /* CONTIKI_VERSION_STRING */
 
 #endif /* __CONTIKI_VERSION__ */

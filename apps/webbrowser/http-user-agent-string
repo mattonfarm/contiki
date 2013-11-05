@@ -1,1 +1,5 @@
+<<<<<<< 0eab95ec4c73592cb39cc05683df33f9c1a694ad
 http_user_agent_fields "Connection: close\r\nUser-Agent: Contiki/3.x (; http://www.contiki-os.org/)\r\n\r\n"
+=======
+http_user_agent_fields "Connection: close\r\nUser-Agent: Contiki/2.7 (; http://www.contiki-os.org/)\r\n\r\n"
+>>>>>>> Bumped the version number from Contiki 2.6 to Contiki 2.7

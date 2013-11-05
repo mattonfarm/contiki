@@ -32,7 +32,11 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
+<<<<<<< 0eab95ec4c73592cb39cc05683df33f9c1a694ad
 PROJECT_NAME           = "Contiki 3.x"
+=======
+PROJECT_NAME           = "Contiki 2.7"
+>>>>>>> Bumped the version number from Contiki 2.6 to Contiki 2.7
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
