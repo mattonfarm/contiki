@@ -50,7 +50,19 @@
 /** \name ALS sensor
  * @{
  */
+<<<<<<< 410ebe0ca4707a61806da45d3595a6b24a8dee39:platform/cc2538dk/dev/als-sensor.h
 #define ALS_SENSOR "ALS"
+=======
+#define ADC_SENSOR "ADC"
+
+#define ADC_SENSOR_VDD_3        0 /**< On-chip VDD / 3 */
+#define ADC_SENSOR_TEMP         1 /**< On-chip temperature */
+#define ADC_SENSOR_ALS          2 /**< Ambient light sensor */
+#define ADC_SENSOR_SENS4	3 /**< Onfarm Board SENS4 */
+#define ADC_SENSOR_SENS3	4 /**< Onfarm Board SENS3 */
+#define ADC_SENSOR_SENS2	5 /**< Onfarm Board SENS2 */
+#define ADC_SENSOR_SENS1	6 /**< Onfarm Board SENS1 */
+>>>>>>> Changes to ADC and board to make our stuff work:platform/cc2538dk/dev/adc-sensor.h
 /** @} */
 
 //extern const struct sensors_sensor als_sensor;

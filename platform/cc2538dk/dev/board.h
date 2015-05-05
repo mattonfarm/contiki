@@ -167,8 +167,6 @@
 /* Notify various examples that we have Buttons */
 #define PLATFORM_HAS_BUTTON      0
 
-/** @} */
-/*---------------------------------------------------------------------------*/
 /**
  * \name ADC configuration
  *
