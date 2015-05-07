@@ -121,28 +121,12 @@
 #define UART0_TX_PORT           GPIO_A_NUM
 #define UART0_TX_PIN            1
 
-<<<<<<< b17280471e827f734c5c212872d36058272124ac
 //#define UART1_CTS_PORT           GPIO_B_NUM
 //#define UART1_CTS_PIN            0
 
 //#define UART1_RTS_PORT           GPIO_D_NUM
 //#define UART1_RTS_PIN            3
 
-=======
-<<<<<<< aa80e61ee95668e825e61dfd27e92b18bc6f8b03
-#define UART1_CTS_PORT          GPIO_B_NUM
-#define UART1_CTS_PIN           0
-
-#define UART1_RTS_PORT          GPIO_D_NUM
-#define UART1_RTS_PIN           3
-=======
-//#define UART1_CTS_PORT           GPIO_B_NUM
-//#define UART1_CTS_PIN            0
-
-//#define UART1_RTS_PORT           GPIO_D_NUM
-//#define UART1_RTS_PIN            3
->>>>>>> Changes to board def
->>>>>>> Changes to board def
 /** @} */
 /*---------------------------------------------------------------------------*/
 /** \name SmartRF Button configuration
@@ -183,6 +167,8 @@
 /* Notify various examples that we have Buttons */
 #define PLATFORM_HAS_BUTTON      0
 
+/** @} */
+/*---------------------------------------------------------------------------*/
 /**
  * \name ADC configuration
  *
@@ -210,7 +196,6 @@
  * port / pin macros.
  * @{
  */
-<<<<<<< b17280471e827f734c5c212872d36058272124ac
 
  
 #define SPI_DEFAULT_INSTANCE 0
@@ -245,37 +230,8 @@
 /** RX pin SPI1 */
 #define SPI1_RX_PIN             5
 #endif  /* #if SPI1_IN_USE */
-=======
-#define SPI_CLK_PORT             GPIO_A_NUM /**< Clock port */
-#define SPI_CLK_PIN              2          /**< Clock pin */
-#define SPI_MOSI_PORT            GPIO_A_NUM /**< MOSI port */
-#define SPI_MOSI_PIN             3          /**< MOSI pin */
-#define SPI_MISO_PORT            GPIO_A_NUM /**< MISO port */
-#define SPI_MISO_PIN             4          /**< MISO pin */
->>>>>>> Changes to board def
 /** @} */
 /*---------------------------------------------------------------------------*/
-/** \name I2C configuration
-*
-* There are no a priori defintions on the SmartRF06EB for i2c.  Pin RF1.5
-* is a NC so it is an easy choice for one of the pins. The second pin is
-* defaulted to pin RF1.13 (#LCD_RESET) as the LCD is not supported in 
-* Contiki yet.
-*
-* /note Using the #LCD_RESET line will need to be changed if an LCD
-* driver is developed
-
-* - SCL:  PB3 (RF1.13 on the DK)
-* - SDA:  PB1 (RF1.5 on the DK)
-*/
-
-#define I2C_SCL_PORT        GPIO_B_NUM
-#define I2C_SCL_PORT_BASE   GPIO_B_BASE
-#define I2C_SCL_PIN         2
-#define I2C_SDA_PORT        GPIO_B_NUM
-#define I2C_SDA_PORT_BASE   GPIO_B_BASE
-#define I2C_SDA_PIN         1
-
 /**
  * \name Device string used on startup
  * @{
