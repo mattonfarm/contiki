@@ -165,11 +165,8 @@
 #define BUTTON_DOWN_VECTOR      NVIC_INT_GPIO_PORT_C
 
 /* Notify various examples that we have Buttons */
-<<<<<<< HEAD
 #define PLATFORM_HAS_BUTTON      0
-=======
-#define PLATFORM_HAS_BUTTON     1
->>>>>>> upstream/master
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
@@ -181,16 +178,11 @@
  * ADC inputs can only be on port A.
  * @{
  */
-<<<<<<< HEAD
 #define ADC_SENSOR_SENS4_PIN	7 /**< Onfarm Board SENS4 */
 #define ADC_SENSOR_SENS3_PIN	6 /**< Onfarm Board SENS3 */
 #define ADC_SENSOR_SENS2_PIN	5 /**< Onfarm Board SENS2 */
 #define ADC_SENSOR_SENS1_PIN	4 /**< Onfarm Board SENS1 */
-=======
-#define ADC_ALS_PWR_PORT        GPIO_A_NUM /**< ALS power GPIO control port */
-#define ADC_ALS_PWR_PIN         7 /**< ALS power GPIO control pin */
-#define ADC_ALS_OUT_PIN         6 /**< ALS output ADC input pin on port A */
->>>>>>> upstream/master
+
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
@@ -201,29 +193,21 @@
  * port / pin macros.
  * @{
  */
-<<<<<<< HEAD
-#define SPI_CLK_PORT             GPIO_B_NUM /**< Clock port */
-#define SPI_CLK_PIN              2          /**< Clock pin */
-#define SPI_MOSI_PORT            GPIO_B_NUM /**< MOSI port */
-#define SPI_MOSI_PIN             3          /**< MOSI pin */
-#define SPI_MISO_PORT            GPIO_B_NUM /**< MISO port */
-#define SPI_MISO_PIN             4          /**< MISO pin */
-=======
-#define SPI0_IN_USE             0
+#define SPI0_IN_USE             1
 #define SPI1_IN_USE             0
 #if SPI0_IN_USE
 /** Clock port SPI0 */
-#define SPI0_CLK_PORT           GPIO_A_NUM
+#define SPI0_CLK_PORT           GPIO_B_NUM
 /** Clock pin SPI0 */
 #define SPI0_CLK_PIN            2
 /** TX port SPI0 (master mode: MOSI) */
-#define SPI0_TX_PORT            GPIO_A_NUM
+#define SPI0_TX_PORT            GPIO_B_NUM
 /** TX pin SPI0 */
-#define SPI0_TX_PIN             4
+#define SPI0_TX_PIN             3
 /** RX port SPI0 (master mode: MISO */
-#define SPI0_RX_PORT            GPIO_A_NUM
+#define SPI0_RX_PORT            GPIO_B_NUM
 /** RX pin SPI0 */
-#define SPI0_RX_PIN             5
+#define SPI0_RX_PIN             4
 #endif  /* #if SPI0_IN_USE */
 #if SPI1_IN_USE
 /** Clock port SPI1 */
@@ -239,7 +223,6 @@
 /** RX pin SPI1 */
 #define SPI1_RX_PIN             5
 #endif  /* #if SPI1_IN_USE */
->>>>>>> upstream/master
 /** @} */
 /*---------------------------------------------------------------------------*/
 /**
