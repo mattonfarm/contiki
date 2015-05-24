@@ -196,7 +196,6 @@
  * port / pin macros.
  * @{
  */
-
  
 #define SPI_DEFAULT_INSTANCE 0
 
