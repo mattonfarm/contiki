@@ -106,10 +106,13 @@
 #if BOARD_CONF_DEBUGGER_DEVPACK
 #define BOARD_IOID_UART_RX        BOARD_IOID_DP4_UARTRX
 #define BOARD_IOID_UART_TX        BOARD_IOID_DP5_UARTTX
+<<<<<<< 658ef47b84ed68d92fd5ab99f59716736a7ae85e:platform/srf06-cc26xx/sensortag/cc2650/board.h
 #else
 #define BOARD_IOID_UART_RX        IOID_17
 #define BOARD_IOID_UART_TX        IOID_16
 #endif
+=======
+>>>>>>> Fix sensortag uart pin config:platform/srf06-cc26xx/sensortag/board.h
 
 #define BOARD_IOID_UART_CTS       IOID_UNUSED
 #define BOARD_IOID_UART_RTS       IOID_UNUSED
