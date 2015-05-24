@@ -196,8 +196,10 @@
  * port / pin macros.
  * @{
  */
+
  
 #define SPI_DEFAULT_INSTANCE 0
+
 #define SPI0_IN_USE             1
 #define SPI1_IN_USE             0
 #if SPI0_IN_USE
