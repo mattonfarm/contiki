@@ -41,26 +41,49 @@
 #include "dev/ioc.h"
 #include "dev/gpio.h"
 #include "dev/adc.h"
-#include "dev/als-sensor.h"
+#include "dev/adc-sensor.h"
 
 #include <stdint.h>
 
-#define ADC_ALS_PWR_PORT_BASE    GPIO_PORT_TO_BASE(ADC_ALS_PWR_PORT)
-#define ADC_ALS_PWR_PIN_MASK     GPIO_PIN_MASK(ADC_ALS_PWR_PIN)
-#define ADC_ALS_OUT_PIN_MASK     GPIO_PIN_MASK(ADC_ALS_OUT_PIN)
+#define ADC_SENSOR_SENS1_PIN_MASK     GPIO_PIN_MASK(ADC_SENSOR_SENS1_PIN)
+#define ADC_SENSOR_SENS2_PIN_MASK     GPIO_PIN_MASK(ADC_SENSOR_SENS2_PIN)
+#define ADC_SENSOR_SENS3_PIN_MASK     GPIO_PIN_MASK(ADC_SENSOR_SENS3_PIN)
+#define ADC_SENSOR_SENS4_PIN_MASK     GPIO_PIN_MASK(ADC_SENSOR_SENS4_PIN)
+
 /*---------------------------------------------------------------------------*/
 static int
 value(int type)
 {
-  uint8_t channel = SOC_ADC_ADCCON_CH_AIN0 + ADC_ALS_OUT_PIN;
+  uint8_t channel;
   int16_t res;
 
-  GPIO_SET_PIN(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
-  clock_delay_usec(2000);
+  switch(type) {
+  case ADC_SENSOR_VDD_3:
+    channel = SOC_ADC_ADCCON_CH_VDD_3;
+	res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
+    break;
+  case ADC_SENSOR_SENS1:
+    channel = ADC_SENSOR_SENS1_PIN;
+	res = adc_get(channel, SOC_ADC_ADCCON_REF_AVDD5, SOC_ADC_ADCCON_DIV_512);
+    break;
+  case ADC_SENSOR_SENS2:
+    channel = ADC_SENSOR_SENS2_PIN;
+	res = adc_get(channel, SOC_ADC_ADCCON_REF_AVDD5, SOC_ADC_ADCCON_DIV_512);
+    break;
+  case ADC_SENSOR_SENS3:
+    channel = ADC_SENSOR_SENS3_PIN;
+	res = adc_get(channel, SOC_ADC_ADCCON_REF_AVDD5, SOC_ADC_ADCCON_DIV_512);
+    break;
+  case ADC_SENSOR_SENS4:
+    channel = ADC_SENSOR_SENS4_PIN;
+	res = adc_get(channel, SOC_ADC_ADCCON_REF_AVDD5, SOC_ADC_ADCCON_DIV_512);
+    break;
+  default:
+    return 0;
+  }
 
-  res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
+  //res = adc_get(channel, SOC_ADC_ADCCON_REF_INT, SOC_ADC_ADCCON_DIV_512);
 
-  GPIO_CLR_PIN(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
 
   return res;
 }
@@ -70,15 +93,7 @@ configure(int type, int value)
 {
   switch(type) {
   case SENSORS_HW_INIT:
-    GPIO_SOFTWARE_CONTROL(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
-    GPIO_SET_OUTPUT(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
-    GPIO_CLR_PIN(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
-    ioc_set_over(ADC_ALS_PWR_PORT, ADC_ALS_PWR_PIN, IOC_OVERRIDE_DIS);
-
-    GPIO_SOFTWARE_CONTROL(GPIO_A_BASE, ADC_ALS_OUT_PIN_MASK);
-    GPIO_SET_INPUT(GPIO_A_BASE, ADC_ALS_OUT_PIN_MASK);
-    ioc_set_over(GPIO_A_NUM, ADC_ALS_OUT_PIN, IOC_OVERRIDE_ANA);
-
+    adc_init();
     break;
   }
   return 0;
@@ -90,6 +105,6 @@ status(int type)
   return 1;
 }
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(als_sensor, ALS_SENSOR, value, configure, status);
+SENSORS_SENSOR(adc_sensor, ADC_SENSOR, value, configure, status);
 
 /** @} */
