@@ -210,10 +210,10 @@
 #define UIP_CONF_ND6_RETRANS_TIMER       10000
 
 #ifndef NBR_TABLE_CONF_MAX_NEIGHBORS
-#define NBR_TABLE_CONF_MAX_NEIGHBORS        20
+#define NBR_TABLE_CONF_MAX_NEIGHBORS        50
 #endif
 #ifndef UIP_CONF_MAX_ROUTES
-#define UIP_CONF_MAX_ROUTES                 20
+#define UIP_CONF_MAX_ROUTES                 100
 #endif
 
 #ifndef UIP_CONF_TCP

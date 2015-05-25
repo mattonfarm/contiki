@@ -17,7 +17,6 @@
 #include "net/ip/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "net/ip/uip-udp-packet.h"
-#include "sys/ctimer.h"
 
 #include "sys/etimer.h"
 #include "sys/rtimer.h"
