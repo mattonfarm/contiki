@@ -469,8 +469,8 @@ int uart_rx_callback(unsigned char c) {
 void ReadFromEEPROM(void) {
 	watchdog_periodic();									//Give the dog a bone - we don't want him to bark now
 	int i, j;												//For loop counters	
-	spi_set_mode(SSI_CR0_FRF_MOTOROLA, 0, 0, 8);			//Set the SPI bus in motorolla mode 0,0, 8 bit
-	spi_enable();											//Enable the spi bus
+	spix_set_mode(0,SSI_CR0_FRF_MOTOROLA, 0, 0, 8);			//Set the SPI bus in motorolla mode 0,0, 8 bit
+	spix_enable(0);		
 	
 	//Read node channel from EEPROM
 	SPI_CS_CLR(GPIO_B_NUM, 1);								//Bring EEPROM CS low to address the chip
@@ -553,8 +553,8 @@ void ReadFromEEPROM(void) {
 void WriteToEEPROM(void)
 {
 	int j;														//Index variable for FOR loop
-	spi_set_mode(SSI_CR0_FRF_MOTOROLA, 0, 0, 8);				//Set the SPI bus in motorolla mode 0,0, 8 bit
-	spi_enable();												//Enable the spi bus
+	spix_set_mode(0,SSI_CR0_FRF_MOTOROLA, 0, 0, 8);				//Set the SPI bus in motorolla mode 0,0, 8 bit
+	spix_enable(0);												//Enable the spi bus
 	
 	//Write RF channel variable to EEPROM
 	SPI_CS_CLR(GPIO_B_NUM, 1);									//Set CS low to address EEPROM
@@ -983,7 +983,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	PROCESS_BEGIN();
 	
 	spi_init();											//Initialise the SPI bus (this library is included in Contiki and is cc2538 specific)
-	spi_cs_init(GPIO_B_NUM, 1);							//Configure PORTB.1 as the Chip Select (CS) line for the EEPROM chip on the SPI BUS
+	spix_cs_init(GPIO_B_NUM, 1);							//Configure PORTB.1 as the Chip Select (CS) line for the EEPROM chip on the SPI BUS
 	SPI_CS_SET(GPIO_B_NUM, 1);							//Set the EEPROM CS line to high (chip not selected - default state)
 
 	ReadFromEEPROM();											//Read all our saved values from SPI EEPROM
