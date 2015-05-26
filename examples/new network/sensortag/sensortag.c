@@ -208,29 +208,29 @@ static void send_message(void *notUsed)
 
 	sprintf(StringBuffer, "ST,PR=%d.%02d,", bmp_pressure / 100, bmp_pressure % 100);				//Add ST designator
 
-	sprintf(StringBuffer, "%sT1=%d.%02d,",StringBuffer, bmp_temperature / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sT1=%d.%02d,",StringBuffer, bmp_temperature / 100, bmp_temperature % 100);
 
-	sprintf(StringBuffer, "%sT2=%d.%02d,",StringBuffer, tmp_ambient / 1000, bmp_pressure % 1000);
+	sprintf(StringBuffer, "%sT2=%d.%02d,",StringBuffer, tmp_ambient / 1000, tmp_ambient % 1000);
 
-	sprintf(StringBuffer, "%sT3=%d.%02d,",StringBuffer, tmp_object / 1000, bmp_pressure % 1000);
+	sprintf(StringBuffer, "%sT3=%d.%02d,",StringBuffer, tmp_object / 1000, tmp_object % 1000);
 
-	sprintf(StringBuffer, "%sT4=%d.%02d,",StringBuffer, hdc_temperature / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sT4=%d.%02d,",StringBuffer, hdc_temperature / 100, hdc_temperature % 100);
 	
-	sprintf(StringBuffer, "%sHU=%d.%02d,",StringBuffer, hdc_humidity / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sHU=%d.%02d,",StringBuffer, hdc_humidity / 100, hdc_humidity % 100);
 	
-	sprintf(StringBuffer, "%sLX=%d.%02d,",StringBuffer, opt_lux / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sLX=%d.%02d,",StringBuffer, opt_lux / 100, opt_lux % 100);
 	
-	sprintf(StringBuffer, "%sGX=%d.%02d,",StringBuffer, mpu_gyro_x / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sGX=%d.%02d,",StringBuffer, mpu_gyro_x / 100, mpu_gyro_x % 100);
 	
-	sprintf(StringBuffer, "%sGY=%d.%02d,",StringBuffer, mpu_gyro_y / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sGY=%d.%02d,",StringBuffer, mpu_gyro_y / 100, mpu_gyro_y % 100);
 	
-	sprintf(StringBuffer, "%sGZ=%d.%02d,",StringBuffer, mpu_gyro_z / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sGZ=%d.%02d,",StringBuffer, mpu_gyro_z / 100, mpu_gyro_z % 100);
 	
-	sprintf(StringBuffer, "%sAX=%d.%02d,",StringBuffer, mpu_acc_x / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sAX=%d.%02d,",StringBuffer, mpu_acc_x / 100, mpu_acc_x % 100);
 	
-	sprintf(StringBuffer, "%sAY=%d.%02d,",StringBuffer, mpu_acc_y / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sAY=%d.%02d,",StringBuffer, mpu_acc_y / 100, mpu_acc_y % 100);
 	
-	sprintf(StringBuffer, "%sAZ=%d.%02d,",StringBuffer, mpu_acc_z / 100, bmp_pressure % 100);
+	sprintf(StringBuffer, "%sAZ=%d.%02d,",StringBuffer, mpu_acc_z / 100, mpu_acc_z % 100);
 	
 	sprintf(StringBuffer, "%sBT=%d,",StringBuffer, bat_temperature);
 	
@@ -607,7 +607,7 @@ PROCESS_THREAD(cc26xx_demo_process, ev, data)
 	
         if(ev == PROCESS_EVENT_TIMER) {
       if(data == &et) {
-        leds_toggle(CC26XX_DEMO_LEDS_PERIODIC);
+       // leds_toggle(CC26XX_DEMO_LEDS_PERIODIC);
 
         get_sync_sensor_readings();
 		

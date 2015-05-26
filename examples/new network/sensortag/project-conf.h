@@ -42,6 +42,8 @@
 #define CC26XX_RF_CONF_BLE_SUPPORT            0 /* Only available with CC2650 */
 
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE    8
+
+#define CC26XX_UART_CONF_ENABLE 0
 /*---------------------------------------------------------------------------*/
 #endif /* PROJECT_CONF_H_ */
 /*---------------------------------------------------------------------------*/
