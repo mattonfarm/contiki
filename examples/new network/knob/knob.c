@@ -232,11 +232,10 @@ int uart_rx_callback(unsigned char c) {
 
 PROCESS_THREAD(knob_accelerometer_process, ev,data)
 {
-	uint8_t i2cresult;
 	int16_t TempInt;
 	PROCESS_BEGIN();
 	
-	i2c_init();						//Initialize the i2c bus
+	i2c_init(GPIO_B_NUM,1,GPIO_B_NUM,2,I2C_SCL_FAST_BUS_SPEED);						//Initialize the i2c bus
 	
 	uint8_t data[2];
     // write 0000 0000 = 0x00 to accelerometer control register 1 to place MMA8652 into
@@ -246,7 +245,7 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
 	
     data[0] = MMA8652_CTRL_REG1;
     data[1] = 0x00;
-    i2c_write_bytes(data, 2, MMA8652_SLAVE_ADDR);
+    i2c_burst_send(MMA8652_SLAVE_ADDR, data, 2);
     
     // write 0000 0001= 0x01 to XYZ_DATA_CFG register
     // [7]: reserved
@@ -258,12 +257,12 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
     // [1-0]: fs=00 for accelerometer range of +/-2g range with 0.244mg/LSB
     data[0] = MMA8652_XYZ_DATA_CFG;
     data[1] = 0x00;
-    i2c_write_bytes(data, 2, MMA8652_SLAVE_ADDR);
+    i2c_burst_send(MMA8652_SLAVE_ADDR, data, 2);
  
 	//High resolution mode
     data[0] = MMA8652_CTRL_REG2;
     data[1] = 0x01;
-    i2c_write_bytes(data, 2, MMA8652_SLAVE_ADDR);
+    i2c_burst_send(MMA8652_SLAVE_ADDR, data, 2);
  
     // write 0000 1101 = 0x0D to accelerometer control register 1
     // [7-6]: aslp_rate=00
@@ -273,7 +272,7 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
     // [0]: active=1 to take the part out of standby and enable sampling
     data[0] = MMA8652_CTRL_REG1;
     data[1] = 0x21;
-    i2c_write_bytes(data, 2, MMA8652_SLAVE_ADDR);
+    i2c_burst_send(MMA8652_SLAVE_ADDR, data, 2);
 	
 	etimer_set(&accel, CLOCK_SECOND);
 	
@@ -283,11 +282,11 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
 			etimer_reset(&accel);
 
 			lpm_set_max_pm(0);
-			i2c_init();
-			i2c_write_byte(0x00, MMA8652_SLAVE_ADDR);
+			i2c_init(GPIO_B_NUM,1,GPIO_B_NUM,2,I2C_SCL_FAST_BUS_SPEED);						//Initialize the i2c bus
+			i2c_single_send(MMA8652_SLAVE_ADDR, 0x00);
 			
 			delay_msec(10);
-			i2c_read_bytes(i2c, 10, MMA8652_SLAVE_ADDR);
+			i2c_burst_receive(MMA8652_SLAVE_ADDR, i2c, 10);
 			
 			TempInt = i2c[1] << 8;
 			TempInt = TempInt | i2c[2];
