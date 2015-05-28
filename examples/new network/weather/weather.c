@@ -212,6 +212,7 @@ int WeatherSerialDataCallback(unsigned char c)
 		return 0;
 	}
 	
+	printf("%c",c);
 	if (c == '\r')
 	{
 		//printf("%s",weather_rx_buffer);
@@ -435,6 +436,7 @@ PROCESS_THREAD(weather_serial_process, ev, data)
 {
 	PROCESS_BEGIN();
 
+	uart_init(1);
 	uart_set_input(1, WeatherSerialDataCallback);
 
 
