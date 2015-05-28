@@ -49,15 +49,9 @@
 #include <string.h>
 
 /** \brief Exports a global symbol to be used by the sensor API */
-<<<<<<< ee3e5b81680074f66f81121c1eed838850842cf7
 //SENSORS(&button_select_sensor, &button_left_sensor, &button_right_sensor,
 //        &button_up_sensor, &button_down_sensor, &als_sensor,
 //        &cc2538_temp_sensor, &vdd3_sensor, &adc_sensor);
-=======
-SENSORS(&button_select_sensor, &button_left_sensor, &button_right_sensor,
-        &button_up_sensor, &button_down_sensor, &als_sensor,
-        &cc2538_temp_sensor, &vdd3_sensor, &adc_sensor);
->>>>>>> Fix ADC issues with contiki changes
 
 SENSORS( &vdd3_sensor, &adc_sensor);
 /**

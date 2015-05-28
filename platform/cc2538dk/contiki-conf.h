@@ -165,7 +165,7 @@ typedef uint32_t rtimer_clock_t;
 #endif
 
 #ifndef UART1_CONF_UART
-#define UART1_CONF_UART             0 /**< UART to use for examples relying on
+#define UART1_CONF_UART             1 /**< UART to use for examples relying on
                                            the uart1_* API */
 #endif
 
