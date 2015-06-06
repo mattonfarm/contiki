@@ -146,7 +146,7 @@ main(void)
   clock_init();
   lpm_init();
   rtimer_init();
-  gpio_init();
+ // gpio_init();
 
   leds_init();
   fade(LEDS_YELLOW);

@@ -5,6 +5,7 @@
 #define UART1_TX_PORT            GPIO_A_NUM
 #define UART1_TX_PIN             3
 
+#define LPM_CONF_ENABLE 0
 
 #define UART1_CONF_BAUD_RATE 9600
 #define UART1_CONF_UART 1
