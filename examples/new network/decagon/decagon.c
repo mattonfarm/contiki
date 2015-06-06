@@ -250,8 +250,8 @@ void send_message(void* ptr) {
 	Voltage = (((value / 20) * A0) / (2047 << 4)) * 4.7212;
 
 	//Turn off Soil Moisture Sensors (PORTB.5)
-	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
-	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
+//	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
+//	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		
 		
@@ -943,6 +943,7 @@ static void decagon_line(void) {
 }
 
 int uart1_rx_callback(unsigned char c){
+	uart_write_byte(0,c);
 	if(usart1_rx_buffer_index < 100) {						//The usart buffer string is 500 chars long so this prevents an overflow
 		if ((c >= 32 && c <= 128) || c == '\n' || c == '\r'){
 			usart1_rx_buffer[usart1_rx_buffer_index++] = c;		//Add a byte to the rx_buffer
@@ -1059,7 +1060,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	PROCESS_BEGIN();
 	
 	//Set Digital Output1 to low
-	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));		//Take software control of Digital Output1 pin
+	ioc_set_over(GPIO_B_NUM, 5, IOC_OVERRIDE_DIS);
 	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));			//Set Digital Output1 pin to an Output pin
 	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));				//Set Digital Output1 to low (OFF)
 
@@ -1135,8 +1136,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 		printf("Prepare Packet\r");					//Debug message
 		
 		//Turn on Soil Moisture Sensors (PORTB.5)
-		ioc_set_over(GPIO_B_NUM, 5, IOC_OVERRIDE_DIS);
-		GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
+	//	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		OneWireGetReading();						//Instruct one wire devices to take a measurement (takes 1/2 sec)
 			
@@ -1157,7 +1157,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 			}				
 		}
 		
-		ctimer_set(&backoff_timer, (random_rand() % (3 * CLOCK_SECOND)), send_message, NULL);		//Wait 3 seconds for soil moisture node to settle and then send data
+		ctimer_set(&backoff_timer,4 * CLOCK_SECOND, send_message, NULL);		//Wait 3 seconds for soil moisture node to settle and then send data
 		watchdog_periodic();				//Feed doge
 	}
   }
