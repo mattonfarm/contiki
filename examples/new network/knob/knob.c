@@ -91,7 +91,7 @@ int usart_rx_buffer_index = 0;										//And an index for that buffer
 
 unsigned char channel = 0x19;										//Set the RF channel to 0x19 by default			
 unsigned char client[11] = {0,0,0,0,0,0,0,0,0,0,0};					//Declare a variable to store the client name (used as a reference only)
-unsigned int MeasurementPeriod = 10;								//Default measurement period = 1 min
+unsigned int MeasurementPeriod = 60;								//Default measurement period = 1 min
 
 
 static struct etimer accel;	
@@ -105,19 +105,6 @@ PROCESS(knob_collect_process, "knob Collect");
 PROCESS(knob_accelerometer_process, "knob accelerometer");
 AUTOSTART_PROCESSES(&knob_collect_process, &knob_accelerometer_process);
 /*---------------------------------------------------------------------------*/
-
-void CheckIfSleepDisabledByPin(void)
-{
-	if (GPIO_READ_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5))){	//If PIND.5 is floating
-		leds_off(LEDS_RED);													//Turn the RED led OFF
-		lpm_set_max_pm(2);													//Go into power saving mode 2
-	}
-	else {																	//Else we do not go into power saving mode
-		leds_on(LEDS_RED);													//And keep the RED led ON to show this
-		lpm_set_max_pm(0);
-	}
-}
-
 
 // This extends the built in contiki microsecond delay routing to milliseconds
 void delay_msec(int time) {
@@ -140,9 +127,6 @@ void send_message(void* ptr) {
 	static int seq_id;
 	
 	printf("ADC Set\r");				//Print debug to UART
-
-	lpm_set_max_pm(0);					//Disable power saving modes as this can affect the ADC / radio messages
-	leds_on(LEDS_RED);					//Turn RED leds on to signal that power saving is disabled
 
 	//Measure Regulator voltage (VCC / 3 (internal))
 	value = 0;							//Reset the temporary 'value' variable
@@ -281,7 +265,6 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
 		if(etimer_expired(&accel)){
 			etimer_reset(&accel);
 
-			lpm_set_max_pm(0);
 			i2c_init(GPIO_B_NUM,1,GPIO_B_NUM,2,I2C_SCL_FAST_BUS_SPEED);						//Initialize the i2c bus
 			i2c_single_send(MMA8652_SLAVE_ADDR, 0x00);
 			
@@ -329,13 +312,13 @@ PROCESS_THREAD(knob_accelerometer_process, ev,data)
 
 			if(Phi > 45.0 || Phi < -45.0){
 				Above45 = true;
-				leds_on(LEDS_GREEN);
+				GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(1));
 			}
 			else{
 				Above45 = false;
-				leds_toggle(LEDS_GREEN);
+				GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(1));
+
 			}
-			lpm_set_max_pm(2);
 		}
 	}
 	PROCESS_END();
