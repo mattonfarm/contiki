@@ -180,7 +180,7 @@ typedef uint32_t rtimer_clock_t;
 #endif
 
 #ifndef UART1_CONF_UART
-#define UART1_CONF_UART             1 /**< UART to use for examples relying on
+#define UART1_CONF_UART             0 /**< UART to use for examples relying on
                                            the uart1_* API */
 #endif
 
@@ -503,7 +503,7 @@ typedef uint32_t rtimer_clock_t;
 #define UIP_CONF_IP_FORWARD                  1
 
 #ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE               108
+#define UIP_CONF_BUFFER_SIZE               150
 #endif
 
 #define RIME_CONF_NO_POLITE_ANNOUCEMENTS     0
