@@ -14,16 +14,12 @@
 #include "net/ip/uip-udp-packet.h"
 #include "sys/etimer.h"
 #include "sys/rtimer.h"
-#include "dev/watchdog.h"
-//#include "dev/serial-line.h"
-//#include "dev/sys-ctrl.h"
 #include "lpm.h"
 #include "dev/uart.h"
 #include "dev/adc-sensor.h"
 #include <stdint.h>
 #include "spi-arch.h"
 #include "spi.h"
-//#include "cpu.h"
 #include "dev/cc2538-rf.h"
 #include "net/netstack.h"
 #include "random.h"
@@ -34,7 +30,7 @@
 #include "dev/leds.h"
 #include <stdlib.h>
 #include "net/rpl/rpl.h"
-//#include "dev/button-sensor.h"
+#include "dev/watchdog.h"
 
 #define UDP_CLIENT_PORT 8765
 #define UDP_SERVER_PORT 5678
@@ -204,32 +200,6 @@ void send_message(void* ptr) {
 	frac = A3 - dec;	
 	sprintf(StringBuffer, "%sA3=%d.%02u,",StringBuffer, dec, (unsigned int) (frac*100));	//Add Analog3 value to packet buffer
 	
-	//CRC Check the wireless stream
-	printf("CRC Check..\r");
-	//CRC Check serial string by summing each character in array into a 8 bit unsigned int
-	CRC = 0;								//Reset CRC to 0
-	for (i = 0; i < 130; i++) {
-		if (StringBuffer[i] == 0)			//If we have reached end of string i.e. a null terminator
-			break;							//Stop adding characters to CRC value
-		CRC += StringBuffer[i];				//Else we are still progressing thru the string and need to add each character value to running CRC
-	}
-	printf("\r");
-
-	watchdog_periodic();											//Feed the dog
-	sprintf(StringBuffer, "%s ~%d",StringBuffer, CRC);				//Add the CRC value to the string buffer
-
-	printf("%s\r",StringBuffer);			//Print the complete string buffer to the UART (debug)
-	printf("Sending message\r");			//Debug message
-	
-	//Send the string over the wireless network to the sink using RIME collect
-
-    printf("Sending\n");					//Debug message
-    
- seq_id++;
-	PRINTF("DATA send to %d seq %d'\n", server_ipaddr.u8[sizeof(server_ipaddr.u8) - 1], seq_id);
-    uip_udp_packet_sendto(client_conn, StringBuffer, strlen(StringBuffer), &server_ipaddr, UIP_HTONS(UDP_SERVER_PORT));
-	
-	sprintf(StringBuffer, "CL,");
 	//Print the one wire temperature values. Current loop boards support 5 one wire sensors.
 	for (i = 0; i < 5; i++)	{
 		dec = WireTemp[i];							//Extract the integer part of the float reading
@@ -245,23 +215,7 @@ void send_message(void* ptr) {
 	//Regulator voltage (soil moisture does not have battery voltage)
 	dec = A0;
 	frac = A0 - dec;	
-	sprintf(StringBuffer, "%sBV=%d.%02u,",StringBuffer, dec, (unsigned int) (frac*100));
-
-	watchdog_periodic();
-
-	//CRC Check the wireless stream
-	printf("CRC Check..\r");
-	//CRC Check serial string by summing each character in array into a 8 bit unsigned int
-	CRC = 0;								//Reset CRC to 0
-	for (i = 0; i < 130; i++) {
-		if (StringBuffer[i] == 0)			//If we have reached end of string i.e. a null terminator
-			break;							//Stop adding characters to CRC value
-		CRC += StringBuffer[i];				//Else we are still progressing thru the string and need to add each character value to running CRC
-	}
-	printf("\r");
-
-	watchdog_periodic();											//Feed the dog
-	sprintf(StringBuffer, "%s ~%d",StringBuffer, CRC);				//Add the CRC value to the string buffer
+	sprintf(StringBuffer, "%sBV=%d.%02u",StringBuffer, dec, (unsigned int) (frac*100));
 
 	printf("%s\r",StringBuffer);			//Print the complete string buffer to the UART (debug)
 	printf("Sending message\r");			//Debug message
@@ -323,7 +277,7 @@ static void process_line(void) {
 	else if (strncmp(usart_rx_buffer,"a",1) == 0) {		//If we received an "a" in position 1, a channel set has been requested. The next 2 chars are the channel no in ASCII hex
 		channel = (usart_rx_buffer[1] - 48) * 10;
 		channel += (usart_rx_buffer[2] - 48);
-		NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio to the new channel
+		//NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio to the new channel
 		printf("On channel %d\r",channel);				//Spit out a debug message
 	}
 	else if (strncmp(usart_rx_buffer,"b",1) == 0) {		//A "b" in position 1 means set a new client name, the next 10 chars are the client name (unless a "\r" is rx before then)
@@ -844,7 +798,7 @@ void OneWireGetReading(void)
 //Read temperature data from each one wire slave
 //This should be sitting in the scratchpad after running OneWireGetReading and waiting 500msec
 float ProcessOneWire(int SensorNo) {
-	int OneWireValue;									//This is where the raw one wire temperature value is temporarily stored
+	short OneWireValue;									//This is where the raw one wire temperature value is temporarily stored
 	unsigned char i;									//Loop index
 	if (OneWireDeviceFound == true)	{					//There is no point doing anything if we didn't detect any slaves
 		OneWireReset();									//Send a reset pulse to one wire devices to sync the bus
@@ -987,8 +941,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	SPI_CS_SET(GPIO_B_NUM, 1);							//Set the EEPROM CS line to high (chip not selected - default state)
 
 	ReadFromEEPROM();											//Read all our saved values from SPI EEPROM
-	NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio channel to the value read from SPI EEPROM (this will default to 0x19 if invalid)
-	printf("On channel %d\r",channel);							//Debug message
+	//NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio channel to the value read from SPI EEPROM (this will default to 0x19 if invalid)
+	//printf("On channel %d\r",channel);							//Debug message
 	
 	sprintf(ThisNodeAddress, "SO %03u.%03u", linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);	//Debug message printing node address
 
@@ -1059,14 +1013,13 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	
 	if(etimer_expired(&periodic)) {					//The send message event timer expired variable
 		etimer_set(&periodic, SEND_INTERVAL);		//Reset the event timer (SEND_INTERVAL may have changed due to a node reconfiguration)
-		watchdog_periodic();						//Give the dog some food
 		printf("Prepare Packet\r");					//Debug message
 		
 		OneWireGetReading();						//Instruct one wire devices to take a measurement (takes 1/2 sec)
 			
 		//Take one wire readings (Current loop node has up to 2 one wire sensors
 		for (j = 0; j < 5; j++) {
-			for (Retry = 0; Retry < 5; Retry++) {				//Sometimes the one wire function gets interrupted and the data gets corrupted, we retry up to 5 times
+			for (Retry = 0; Retry < 10; Retry++) {				//Sometimes the one wire function gets interrupted and the data gets corrupted, we retry up to 10 times
 				TempReading = ProcessOneWire(j);				//Call ProcessOneWire on node number (j) and store the result in TempReading as a float
 				dec = TempReading;								//Do our little trick for printing floats
 				if (TempReading > 0)
