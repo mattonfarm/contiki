@@ -308,7 +308,7 @@ typedef uint32_t rtimer_clock_t;
 #define NULLRDC_802154_AUTOACK_HW               1
 
 /* Configure ContikiMAC for when it's selected */
-#define CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION 0
+#define CONTIKIMAC_CONF_WITH_PHASE_OPTIMIZATION 1
 #define WITH_FAST_SLEEP                         1
 
 #ifndef NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE
@@ -394,7 +394,7 @@ typedef uint32_t rtimer_clock_t;
 #endif
 
 #ifndef CC2538_RF_CONF_CHANNEL
-#define CC2538_RF_CONF_CHANNEL              25
+#define CC2538_RF_CONF_CHANNEL              26
 #endif /* CC2538_RF_CONF_CHANNEL */
 
 #ifndef CC2538_RF_CONF_AUTOACK
@@ -418,7 +418,7 @@ typedef uint32_t rtimer_clock_t;
 
 /* Don't let contiki-default-conf.h decide if we are an IPv6 build */
 #ifndef NETSTACK_CONF_WITH_IPV6
-#define NETSTACK_CONF_WITH_IPV6                        0
+#define NETSTACK_CONF_WITH_IPV6                        1
 #endif
 
 #if NETSTACK_CONF_WITH_IPV6
@@ -457,10 +457,10 @@ typedef uint32_t rtimer_clock_t;
 #define UIP_CONF_ND6_RETRANS_TIMER       10000
 
 #ifndef NBR_TABLE_CONF_MAX_NEIGHBORS
-#define NBR_TABLE_CONF_MAX_NEIGHBORS                100
+#define NBR_TABLE_CONF_MAX_NEIGHBORS                80
 #endif
 #ifndef UIP_CONF_MAX_ROUTES
-#define UIP_CONF_MAX_ROUTES                 200
+#define UIP_CONF_MAX_ROUTES                 160
 #endif
 
 /* uIP */
@@ -495,7 +495,7 @@ typedef uint32_t rtimer_clock_t;
 #define MAC_CONF_CHANNEL_CHECK_RATE          8
 
 #ifndef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM                    8
+#define QUEUEBUF_CONF_NUM                    16
 #endif
 /*---------------------------------------------------------------------------*/
 #else /* NETSTACK_CONF_WITH_IPV6 */
@@ -509,7 +509,7 @@ typedef uint32_t rtimer_clock_t;
 #define RIME_CONF_NO_POLITE_ANNOUCEMENTS     0
 
 #ifndef QUEUEBUF_CONF_NUM
-#define QUEUEBUF_CONF_NUM                    8
+#define QUEUEBUF_CONF_NUM                    16
 #endif
 
 #endif /* NETSTACK_CONF_WITH_IPV6 */
