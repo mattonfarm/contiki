@@ -76,6 +76,7 @@ static uint8_t *packetbufptr;
 void
 packetbuf_clear(void)
 {
+  PRINTF("Clear Packetbuff\r");
   buflen = bufptr = 0;
   hdrptr = PACKETBUF_HDR_SIZE;
 
@@ -157,6 +158,7 @@ packetbuf_copyto(void *to)
 #endif /* DEBUG_LEVEL */
   if(PACKETBUF_HDR_SIZE - hdrptr + buflen > PACKETBUF_SIZE) {
     /* Too large packet */
+	PRINTF("Packet too large for buffer\r");
     return 0;
   }
   memcpy(to, packetbuf + hdrptr, PACKETBUF_HDR_SIZE - hdrptr);
@@ -170,8 +172,10 @@ packetbuf_hdralloc(int size)
 {
   if(hdrptr >= size && packetbuf_totlen() + size <= PACKETBUF_SIZE) {
     hdrptr -= size;
+	PRINTF("Allocated %d bytes in Packetbuf\r", size);
     return 1;
   }
+  PRINTF("Cannot allocate space in Packetbuff\r");
   return 0;
 }
 /*---------------------------------------------------------------------------*/

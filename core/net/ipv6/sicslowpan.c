@@ -71,7 +71,8 @@
 
 #include <stdio.h>
 
-#define DEBUG DEBUG_NONE
+//#define DEBUG DEBUG_NONE
+#define DEBUG 0
 #include "net/ip/uip-debug.h"
 #if DEBUG
 /* PRINTFI and PRINTFO are defined for input and output to debug one without changing the timing of the other */
@@ -1371,6 +1372,7 @@ output(const uip_lladdr_t *localdest)
   packetbuf_hdr_len = 0;
 
   /* reset packetbuf buffer */
+  PRINTF("sicslowpan: clear packetbuf\r");
   packetbuf_clear();
   packetbuf_ptr = packetbuf_dataptr();
 
@@ -1460,6 +1462,8 @@ output(const uip_lladdr_t *localdest)
     PRINTFO("uip_len: %d, fragments: %d, free bufs: %d\n", uip_len, estimated_fragments, freebuf);
     if(freebuf < estimated_fragments) {
       PRINTFO("Dropping packet, not enough free bufs\n");
+	  printf("Queuebuf is full and will not recover. RESET NODE\r");
+	  while(1) {};
       return 0;
     }
 
