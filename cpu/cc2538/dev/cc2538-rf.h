@@ -51,7 +51,7 @@
  * RF Config
  *---------------------------------------------------------------------------*/
 /* Constants */
-#define CC2538_RF_CCA_THRES_USER_GUIDE 0xF8
+#define CC2538_RF_CCA_THRES_USER_GUIDE 0xFA //0xF8
 #define CC2538_RF_TX_POWER_RECOMMENDED 0xFF /* ToDo: Determine value */
 #define CC2538_RF_CHANNEL_MIN            11
 #define CC2538_RF_CHANNEL_MAX            26
@@ -77,7 +77,7 @@
 #ifdef CC2538_RF_CONF_CHANNEL
 #define CC2538_RF_CHANNEL CC2538_RF_CONF_CHANNEL
 #else
-#define CC2538_RF_CHANNEL 18
+#define CC2538_RF_CHANNEL 26
 #endif /* CC2538_RF_CONF_CHANNEL */
 
 #ifdef CC2538_RF_CONF_AUTOACK

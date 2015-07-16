@@ -98,6 +98,8 @@ char Relay1, Relay2, Relay3, Relay4;
 static struct uip_udp_conn *client_conn;
 static uip_ipaddr_t server_ipaddr;
 
+//static struct pt UpdateOutputs_pt;
+
 /*---------------------------------------------------------------------------*/
 PROCESS(example_mesh_process, "Mesh example");
 AUTOSTART_PROCESSES(&example_mesh_process);
@@ -178,7 +180,10 @@ void UpdateRelay4()
 }
 
 void UpdateOutputs()
+//static PT_THREAD(UpdateOutputs(struct pt *pt))
 {		
+//	static struct etimer et;
+//	PT_BEGIN(pt);
 	//CS high
 	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(4));
 		
@@ -198,9 +203,13 @@ void UpdateOutputs()
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay1();
 		delay_msec(100);
+//		etimer_set(&et, CLOCK_SECOND / 10);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay1();
 		delay_msec(500);
+//		etimer_set(&et, CLOCK_SECOND / 2);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay1();
 		Relay1 = false;
@@ -221,9 +230,13 @@ void UpdateOutputs()
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay2();
 		delay_msec(100);
+//		etimer_set(&et, CLOCK_SECOND / 10);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay2();
 		delay_msec(500);
+//		etimer_set(&et, CLOCK_SECOND / 2);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay2();
 		Relay2 = false;
@@ -243,9 +256,13 @@ void UpdateOutputs()
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay3();
 		delay_msec(100);
+//		etimer_set(&et, CLOCK_SECOND / 10);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay3();
 		delay_msec(500);
+//		etimer_set(&et, CLOCK_SECOND / 2);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay3();
 		Relay3 = false;
@@ -263,16 +280,19 @@ void UpdateOutputs()
 	else if (Relay4 == pulse){
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay4();
-		delay_msec(100);
+//		delay_msec(100);
+//		etimer_set(&et, CLOCK_SECOND / 10);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay4();
 		delay_msec(500);
+//		etimer_set(&et, CLOCK_SECOND / 2);
+//		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay4();
 		Relay4 = false;
-	}
-	
-		
+	}	
+//	PT_END(pt)
 }
 
 
@@ -294,6 +314,7 @@ void send_message(void* ptr) {
 	//leds_on(LEDS_RED);					//Turn RED leds on to signal that power saving is disabled
 
 	UpdateOutputs();
+//	UpdateOutputs(&UpdateOutputs_pt);
 			
 	//Check inputs
 	//Digital Input1
@@ -719,7 +740,7 @@ int gps_uart_rx_callback(unsigned char c)
 	//This is data from the GPS
 	watchdog_periodic();
 
-    if (c == 0)   //Ignor a null character 
+    if (c == 0)   //Ignore a null character 
         return 0;   
     
     if (c == '$')
@@ -869,15 +890,8 @@ tcpip_handler(void)
 			print_route_network();				//Send list of routes over network
 		}
 		else														//We shouldn't get here but if we do, send a debug message to the UART
-			printf("UNKNOWN OUTPUT\r");
-			
-		
-	}
-	
-	
-	
-	
-	
+			printf("UNKNOWN OUTPUT\r");	
+	}	
   //  printf("DATA recv '%s'\n", str);
   }
 }
@@ -1027,6 +1041,8 @@ PROCESS_PAUSE();
 	etimer_set(&periodic, SEND_INTERVAL);											//Set up an event timer to send data back to base at a set interval
 	watchdog_periodic();															//Feed the doge
 	
+//	UpdateOutputs(&UpdateOutputs_pt);
+	UpdateOutputs();
   while(1) {
 	PROCESS_YIELD();								//Pause the process until an event is triggered
 	if(ev == tcpip_event) {
@@ -1041,7 +1057,7 @@ PROCESS_PAUSE();
 		//printf("GPS ON\r");
 		//sendUBX(GPSon, sizeof(GPSon)/sizeof(uint8_t));
 		//Wait 45 seconds for GPS to get fix
-		printf("Send message\r");
+		printf("Send message in 10 seconds\r");
 		ctimer_set(&backoff_timer, (10 * CLOCK_SECOND), send_message, NULL);	
 		watchdog_periodic();				//Feed doge
 	}
