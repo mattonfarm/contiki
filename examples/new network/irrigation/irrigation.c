@@ -64,7 +64,7 @@ char ThisNodeAddress[12];											//String containing this nodes address (used
 static struct etimer periodic;										//Declare the timer used for sending measurements to the network
 static struct ctimer backoff_timer;									//Declare the timer for delaying a measurement (get one wire data, delay and send)
 
-char usart_rx_buffer[500];											//Define a buffer for storing serial port strings
+char usart_rx_buffer[300];											//Define a buffer for storing serial port strings
 int usart_rx_buffer_index = 0;										//And an index for that buffer
 
 unsigned char channel = 0x19;										//Set the RF channel to 0x19 by default			
@@ -280,7 +280,7 @@ void UpdateOutputs()
 	else if (Relay4 == pulse){
 		GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
 		UpdateRelay4();
-//		delay_msec(100);
+		delay_msec(100);
 //		etimer_set(&et, CLOCK_SECOND / 10);
 //		PT_WAIT_UNTIL(pt, etimer_expired(&et));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));
@@ -738,8 +738,7 @@ void ExtractDataFromGPS_String(void)
 int gps_uart_rx_callback(unsigned char c)
 {
 	//This is data from the GPS
-	watchdog_periodic();
-
+	
     if (c == 0)   //Ignore a null character 
         return 0;   
     
@@ -763,8 +762,13 @@ int gps_uart_rx_callback(unsigned char c)
         gps_buffer[gps_buffer_index++] = c;
         gps_buffer[gps_buffer_index] = 0;
     } 
-
-	watchdog_periodic();
+	
+	if (gps_buffer_index > 300)
+	{
+		GettingGPS_String = false;
+		gps_buffer_index = 0;
+		return 0;
+	}
 
 	return 1;
 }
@@ -1010,6 +1014,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));			
 	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
 	
+	NETSTACK_MAC.off(1);
+	
 PROCESS_PAUSE();
 
   set_global_address();
@@ -1050,7 +1056,6 @@ PROCESS_PAUSE();
     } 
 	if(etimer_expired(&periodic)) {					//The send message event timer expired variable	
 		etimer_set(&periodic, SEND_INTERVAL);		//Reset the event timer (SEND_INTERVAL may have changed due to a node reconfiguration
-		watchdog_periodic();						//Give the dog some food
 		printf("Prepare Packet\r");					//Debug message
 		
 		//Turn GPS ON

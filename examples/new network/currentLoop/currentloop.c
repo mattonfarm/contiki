@@ -944,16 +944,13 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	//NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio channel to the value read from SPI EEPROM (this will default to 0x19 if invalid)
 	//printf("On channel %d\r",channel);							//Debug message
 	
+	NETSTACK_MAC.off(1);
+	
 	sprintf(ThisNodeAddress, "SO %03u.%03u", linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);	//Debug message printing node address
 
 	//Set up one wire data pin (PINC.4) as GPIO input with no pullup
 	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(4));		//Enable software control of PINC.4
 	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(4));				//Make sure PINC.4 is set to no pullup
-
-	//Set up Sleep mode control pin (PIND.5) as input with weak pullup (floating = sleep mode enabled & 0v = no sleep)
-	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));		//Enable software control of PIND.5
-	GPIO_SET_INPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));			//Set PIND.5 as input
-	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(5));				//Enable weak pullup on PIND.5
 
 	//Set analog inputs to ADC peripheral control
 	ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS1_PIN, IOC_OVERRIDE_ANA);

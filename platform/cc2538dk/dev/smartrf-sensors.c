@@ -53,7 +53,7 @@
 //        &button_up_sensor, &button_down_sensor, &als_sensor,
 //        &cc2538_temp_sensor, &vdd3_sensor, &adc_sensor);
 
-SENSORS(&als_sensor, &vdd3_sensor, &adc_sensor);
+SENSORS( &vdd3_sensor, &adc_sensor);
 /**
  * @}
  * @}
