@@ -236,7 +236,7 @@
  * \name Device string used on startup
  * @{
  */
-#define BOARD_STRING "TI SmartRF06 + cc2538EM"
+#define BOARD_STRING "ONFARM DATACHAIN cc2538"
 /** @} */
 
 #endif /* BOARD_H_ */
