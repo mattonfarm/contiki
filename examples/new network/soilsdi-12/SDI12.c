@@ -1187,6 +1187,24 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	//Enable high gain mode on cc2592
 	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));			
 	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+	
+	//Enable SDI-12 Converter
+		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+		delay_msec(10);
+	uart_write_byte(1,'1');
+	uart_write_byte(1,'I');
+	uart_write_byte(1,'\r');
+	uart_write_byte(1,'\n');
+	
+	delay_msec(500);
+	
+	uart_write_byte(1,'2');
+	uart_write_byte(1,'I');
+	uart_write_byte(1,'\r');
+	uart_write_byte(1,'\n');
+	delay_msec(500);
+	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+	
   while(1) {
 	PROCESS_YIELD();								//Pause the process until an event is triggered
 	if(ev == tcpip_event) {
@@ -1203,13 +1221,10 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	//	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		
-		//Enable SDI-12 Converter
-		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
-		delay_msec(1);
-		TakeDecagonReading();	
-		OneWireGetReading();						//Instruct one wire devices to take a measurement (takes 1/2 sec)
-		ctimer_set(&timer2, 2 * CLOCK_SECOND, TakeAcclimaReading, NULL);
 		
+			
+		OneWireGetReading();						//Instruct one wire devices to take a measurement (takes 1/2 sec)
+				
 		//Take one wire readings (DecagonSoil moisture node has up to 2 one wire sensors
 		for (j = 0; j < 2; j++) {
 			for (Retry = 0; Retry < 5; Retry++) {				//Sometimes the one wire function gets interrupted and the data gets corrupted, we retry up to 5 times
@@ -1227,7 +1242,13 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 			}				
 		}
 		
-		ctimer_set(&backoff_timer,5 * CLOCK_SECOND, send_message, NULL);		//Wait 3 seconds for soil moisture node to settle and then send data
+		//Enable SDI-12 Converter
+		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+		delay_msec(10);
+		TakeDecagonReading();
+		ctimer_set(&timer2, 5 * CLOCK_SECOND, TakeAcclimaReading, NULL);
+		
+		ctimer_set(&backoff_timer,10 * CLOCK_SECOND, send_message, NULL);		//Wait 3 seconds for soil moisture node to settle and then send data
 		watchdog_periodic();				//Feed doge
 	}
   }
