@@ -696,7 +696,7 @@ unsigned char oneWireReadByte(void) {
 
 //Read the temperature values from the selected sensor
 //Also reads the CRC value and compares the read CRC with the computed CRC
-int ReadOneWireTemp(void) {
+int16_t ReadOneWireTemp(void) {
 	unsigned char OneWireScratchpad[8];				//This is where the one wire scratchpad is temporarily held
 	unsigned char CRC;								//This is where the CRC received form the node is stored
 	unsigned char RunningCRC = 0;					//This is where the computed CRC is stored
@@ -733,7 +733,7 @@ int ReadOneWireTemp(void) {
 		return -1584;				//If CRCs do not match return the equivalent of -99 - we deal with this higher up in the program
 	}
 
-	return ((int)OneWireScratchpad[1] << 8) + (long)OneWireScratchpad[0];		//If we got a CRC match return the 16 bit value for temperature (scratchpad 0 & 1)
+	return ((int16_t)OneWireScratchpad[1] << 8) + (int16_t)OneWireScratchpad[0];		//If we got a CRC match return the 16 bit value for temperature (scratchpad 0 & 1)
 }
 
 //Send an 8 bit value to a one wire slave
@@ -798,7 +798,7 @@ void OneWireGetReading(void)
 //Read temperature data from each one wire slave
 //This should be sitting in the scratchpad after running OneWireGetReading and waiting 500msec
 float ProcessOneWire(int SensorNo) {
-	short OneWireValue;									//This is where the raw one wire temperature value is temporarily stored
+	float OneWireValue;									//This is where the raw one wire temperature value is temporarily stored
 	unsigned char i;									//Loop index
 	if (OneWireDeviceFound == true)	{					//There is no point doing anything if we didn't detect any slaves
 		OneWireReset();									//Send a reset pulse to one wire devices to sync the bus
