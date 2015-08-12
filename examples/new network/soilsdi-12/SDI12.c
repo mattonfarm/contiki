@@ -198,7 +198,7 @@ void delay_msec(int time) {
 void send_message(void* ptr) {
 	char StringBuffer[MAX_PAYLOAD_LEN];				//Buffer for building the string of readings sent over the wireless network
 	watchdog_periodic();				//Feed the dog
-	int32_t value;						//Temporary variable for storing ADC readings. 32bit as readings are averaged
+	float value;						//Temporary variable for storing ADC readings. 32bit as readings are averaged
 	unsigned char i;				//Temporary variables for storing string loop index
 	static int seq_id;
 
@@ -215,7 +215,7 @@ void send_message(void* ptr) {
 	for (i = 0; i < 20; i++) {			//Take 20 readings of VDD/3
 		value = value + adc_sensor.value(ADC_SENSOR_VDD_3);
 	}
-	A0 = ((value / 20) * (3 * 1195)) / (2047 << 4);	//Divide the ADC value by 20 readings, multiply by 3 as VDD/3
+	A0 = ((value / 20.0) * (3.0 * 1190.0)) / 32752.0;	//Divide the ADC value by 20 readings, multiply by 3 as VDD/3
 	A0 = A0 / 1000.0;								//Divide by 1000 to get mV
 	
 	dec = A0;
@@ -227,21 +227,23 @@ void send_message(void* ptr) {
 	for (i = 0; i < 20; i++) {
 		value = value + adc_sensor.value(ADC_SENSOR_SENS1);
 	}
-	A1 = ((value / 20) * A0) / (2047 << 4);
+	A1 = (A0 / 32752.0) * (value / 20.0);
 
-	//Measure soil moisture sensor 3
-//	value = 0;
-//	for (i = 0; i < 50; i++) {
-//		value = value + adc_sensor.value(ADC_SENSOR_SENS3);
-//	}
-//	A3 = ((value / 50) * A0) / (2047 << 4);
+	//Measure Solar Voltage
+    value = 0;
+	for (i = 0; i < 20; i++) {
+		value = value + adc_sensor.value(ADC_SENSOR_SENS2);
+	}
+	A2 = (A0 / 32752.0) * (value / 20.0) * 11.51479;
+	//A2 = (((value / 20.0) * A0) / 4095);// * 11.95;
 	
 	//Measure soil moisture battery voltage
 	value = 0;
 	for (i = 0; i < 20; i++) {
 		value = value + adc_sensor.value(ADC_SENSOR_SENS4);
 	}
-	Voltage = (((value / 20) * A0) / (2047 << 4)) * 3.85;
+	Voltage = (A0 / 32752.0) * (value / 20.0)* 5.214844;
+	//Voltage = (((value / 20.00) * A0) / 4095);// * 4.95;
 
 	//Turn off DecagonSoil Moisture Sensors (PORTB.5)
 //	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
@@ -291,6 +293,11 @@ void send_message(void* ptr) {
 	frac = Voltage - dec;	
 	sprintf(StringBuffer, "%sBV=%d.%02u,",StringBuffer, dec, (unsigned int) (frac*100));	//Add Battery Voltage value to packet buffer
 	
+	//Solar voltage
+	dec = A2;
+	frac = A2 - dec;	
+	sprintf(StringBuffer, "%sSV=%d.%02u,",StringBuffer, dec, (unsigned int) (frac*100));	//Add Solar Voltage value to packet buffer
+	
 	watchdog_periodic();											//Feed the dog
 
 //	//CRC Check the wireless stream
@@ -325,7 +332,7 @@ void send_message(void* ptr) {
 	AcclimaTemp = -99;
 	AcclimaPermittivity = -99;
 	AcclimaConductivity = -99;
-	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1123,8 +1130,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	
 	//Set up SDI-12 converter control port
 	ioc_set_over(GPIO_D_NUM, 2, IOC_OVERRIDE_DIS);
-	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
-	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));	
+	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));
+	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));	
 	
 	spi_init();											//Initialise the SPI bus (this library is included in Contiki and is cc2538 specific)
 	spix_cs_init(GPIO_B_NUM, 1);							//Configure PORTB.1 as the Chip Select (CS) line for the EEPROM chip on the SPI BUS
@@ -1137,14 +1144,19 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(4));				//Make sure PINC.4 is set to no pullup
 
 	//Set analog inputs to ADC peripheral control
+	ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS1_PIN, IOC_OVERRIDE_DIS);
+	ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS2_PIN, IOC_OVERRIDE_DIS);
+	//ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS3_PIN, IOC_OVERRIDE_DIS);
+	ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS4_PIN, IOC_OVERRIDE_DIS);
+	
 	ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS1_PIN, IOC_OVERRIDE_ANA);
     ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS2_PIN, IOC_OVERRIDE_ANA);
     //ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS3_PIN, IOC_OVERRIDE_ANA);
-    ioc_set_over(GPIO_A_NUM, GPIO_PIN_MASK(7), IOC_OVERRIDE_ANA);
+    ioc_set_over(GPIO_A_NUM, ADC_SENSOR_SENS4_PIN, IOC_OVERRIDE_ANA);
 	GPIO_PERIPHERAL_CONTROL(GPIO_A_NUM, ADC_SENSOR_SENS1_PIN);
 	GPIO_PERIPHERAL_CONTROL(GPIO_A_NUM, ADC_SENSOR_SENS2_PIN);
 	//GPIO_PERIPHERAL_CONTROL(GPIO_A_NUM, ADC_SENSOR_SENS3_PIN);
-	GPIO_PERIPHERAL_CONTROL(GPIO_A_NUM, GPIO_PIN_MASK(7));
+	GPIO_PERIPHERAL_CONTROL(GPIO_A_NUM, ADC_SENSOR_SENS4_PIN);
 	
 	//Set up PINC.5 as an input. This is the Digital Input1 pin
 	GPIO_SOFTWARE_CONTROL(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(5));			//Set PORTC.5 to software peripheral control
@@ -1176,7 +1188,6 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	
 	//Set up the UART for communication with the programmer
 	printf("UART BEGIN\r");
-	ioc_set_over(GPIO_A_NUM, 6, IOC_OVERRIDE_DIS);	//Disable analog (used for uart)
 	uart_set_input(0,uart_rx_callback);
 	uart_init(1);
 	uart_set_input(1,uart1_rx_callback);
@@ -1189,21 +1200,33 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
 	
 	//Enable SDI-12 Converter
-		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
-		delay_msec(10);
-	uart_write_byte(1,'1');
+	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));
+	delay_msec(10);
+	printf("Scan for sensors - we use sensors at address 1 (decagon) and 2 (acclima)\r");
+	uart_write_byte(1,'0');
 	uart_write_byte(1,'I');
+	uart_write_byte(1,'!');
 	uart_write_byte(1,'\r');
 	uart_write_byte(1,'\n');
 	
-	delay_msec(500);
+	delay_msec(1000);
+	
+	delay_msec(10);
+	uart_write_byte(1,'1');
+	uart_write_byte(1,'I');
+	uart_write_byte(1,'!');
+	uart_write_byte(1,'\r');
+	uart_write_byte(1,'\n');
+	
+	delay_msec(1000);
 	
 	uart_write_byte(1,'2');
 	uart_write_byte(1,'I');
+	uart_write_byte(1,'!');
 	uart_write_byte(1,'\r');
 	uart_write_byte(1,'\n');
-	delay_msec(500);
-	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+	delay_msec(1000);
+	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));
 	
   while(1) {
 	PROCESS_YIELD();								//Pause the process until an event is triggered
@@ -1243,7 +1266,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 		}
 		
 		//Enable SDI-12 Converter
-		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
+		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(3));
 		delay_msec(10);
 		TakeDecagonReading();
 		ctimer_set(&timer2, 5 * CLOCK_SECOND, TakeAcclimaReading, NULL);
