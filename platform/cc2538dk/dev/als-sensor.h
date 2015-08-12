@@ -53,7 +53,7 @@
 #define ALS_SENSOR "ALS"
 /** @} */
 
-extern const struct sensors_sensor als_sensor;
+//extern const struct sensors_sensor als_sensor;
 
 #endif /* ALS_SENSOR_H_ */
 

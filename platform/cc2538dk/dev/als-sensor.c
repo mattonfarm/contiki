@@ -49,7 +49,7 @@
 #define ADC_ALS_PWR_PIN_MASK     GPIO_PIN_MASK(ADC_ALS_PWR_PIN)
 #define ADC_ALS_OUT_PIN_MASK     GPIO_PIN_MASK(ADC_ALS_OUT_PIN)
 /*---------------------------------------------------------------------------*/
-static int
+/* static int
 value(int type)
 {
   uint8_t channel = SOC_ADC_ADCCON_CH_AIN0 + ADC_ALS_OUT_PIN;
@@ -63,9 +63,9 @@ value(int type)
   GPIO_CLR_PIN(ADC_ALS_PWR_PORT_BASE, ADC_ALS_PWR_PIN_MASK);
 
   return res;
-}
+} */
 /*---------------------------------------------------------------------------*/
-static int
+/* static int
 configure(int type, int value)
 {
   switch(type) {
@@ -82,14 +82,14 @@ configure(int type, int value)
     break;
   }
   return 0;
-}
+} */
 /*---------------------------------------------------------------------------*/
-static int
+/* static int
 status(int type)
 {
   return 1;
-}
+} */
 /*---------------------------------------------------------------------------*/
-SENSORS_SENSOR(als_sensor, ALS_SENSOR, value, configure, status);
+//SENSORS_SENSOR(als_sensor, ALS_SENSOR, value, configure, status);
 
 /** @} */

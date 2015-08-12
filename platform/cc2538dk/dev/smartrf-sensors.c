@@ -42,7 +42,7 @@
  */
 #include "contiki.h"
 #include "dev/button-sensor.h"
-#include "dev/als-sensor.h"
+//#include "dev/als-sensor.h"
 #include "dev/adc-sensor.h"
 #include "dev/cc2538-sensors.h"
 
