@@ -7,7 +7,7 @@ Port Feature
 ============
 
 The port supports the following boards from ST:
--	NUCLEO-L152RE board, based on the STM32L152RET6 ultra-low power microcontroller
+-    NUCLEO-L152RE board, based on the STM32L152RET6 ultra-low power microcontroller
 -	X-NUCLEO-IDS01A4 based on sub-1GHz SPSGRF-868 SPIRIT1 module (operating at 868 MHz)
 -	X-NUCLEO-IDS01A5 based on sub-1GHz SPSGRF-915 SPIRIT1 module (operating at 915 MHz)
 -   X-NUCLEO-IKS01A1 featuring motion MEMS and environmental sensors (optional)
@@ -72,6 +72,7 @@ The following commands are needed to download the full porting:
     git submodule init
     git submodule update
 (*): required only if using the STclab GitHub repository, these steps won't be needed once the Pull Request will be accepted
+
 
 The platform name is: stm32nucleo-spirit1
 
@@ -142,6 +143,7 @@ This can be done by copying the binary file on the USB mass storage that is
 automatically created when plugging the STM32 Nucleo board to the PC.
 
 6. Reset the MCU by using the reset button on the STM32 Nucleo board
+
 
 
 
