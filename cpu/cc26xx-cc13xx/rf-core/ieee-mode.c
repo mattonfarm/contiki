@@ -1106,6 +1106,8 @@ off(void)
 
   while(transmitting());
 
+  /* stopping the rx explicitly results in lower sleep-mode power usage */
+  rx_off();
   rf_core_power_down();
 
   ENERGEST_OFF(ENERGEST_TYPE_LISTEN);
