@@ -42,6 +42,7 @@ get_target_vars = $(wordlist 2,15,$(subst :, ,$1))
 define dooneexample
 @echo Building example $(3): $(1) for target $(2)
 @((cd $(EXAMPLESDIR)/$(1); \
+<<<<<<< 118ed55b6bde244454bd6e5bcb00ccd3c42740f9
  export STM32W_CPUREV=CC; \
 <<<<<<< df97a4761bbb96884fdf9643903160df46ed9fd0
 <<<<<<< f324a161c3af0dd965d9ce7b0af84858844b24fb
@@ -58,6 +59,8 @@ define dooneexample
  make TARGET=$(2) clean && make TARGET=$(2) WERROR=1) > \
 >>>>>>> Build examples with the WERROR=1 flag passed to make, to ensure that we have a clean non-warning build for all examples on platforms that support the WERROR=1 flag
 =======
+=======
+>>>>>>> Moved STM32W_CPUREV to the relevant compile regression test
  make $(4) TARGET=$(2) clean && make $(4) TARGET=$(2) WERROR=1) > \
 >>>>>>> Added option to specify make variables in the compile regression test
       $(3)-$(subst /,-,$(1))$(2).report 2>&1 && \
