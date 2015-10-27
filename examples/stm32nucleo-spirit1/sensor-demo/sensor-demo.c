@@ -82,14 +82,14 @@
 #include "dev/button-sensor.h"
 #include "dev/leds.h"
 
-#ifdef COMPILE_SENSORS
+#ifdef X_NUCLEO_IKS01A1
 #include "dev/temperature-sensor.h"
 #include "dev/humidity-sensor.h"
 #include "dev/pressure-sensor.h"
 #include "dev/magneto-sensor.h"
 #include "dev/acceleration-sensor.h"
 #include "dev/gyroscope-sensor.h"
-#endif /*COMPILE_SENSORS*/
+#endif /*X_NUCLEO_IKS01A1*/
 
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
@@ -110,14 +110,20 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 
   SENSORS_ACTIVATE(button_sensor);
 
+<<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 #ifdef COMPILE_SENSORS
+=======
+  SENSORS_ACTIVATE(radio_sensor);
+
+#ifdef X_NUCLEO_IKS01A1
+>>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
   SENSORS_ACTIVATE(temperature_sensor);
   SENSORS_ACTIVATE(humidity_sensor);
   SENSORS_ACTIVATE(pressure_sensor);
   SENSORS_ACTIVATE(magneto_sensor);
   SENSORS_ACTIVATE(acceleration_sensor);
   SENSORS_ACTIVATE(gyroscope_sensor);
-#endif
+#endif /*X_NUCLEO_IKS01A1*/
 
   while(1)
   {
@@ -136,6 +142,7 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
     printf("Button state:\t%s (pressed %lu times)\n", button_sensor.value(0)?"Released":"Pressed",
                                                       _button_pressed);
 
+<<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 #ifdef COMPILE_SENSORS
     printf("LEDs status:\tRED:n/a GREEN:%s\n", leds_get()&LEDS_GREEN?"on":"off");
 #else
@@ -145,6 +152,21 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 
 #ifdef COMPILE_SENSORS
     printf("Temperature:\t%d.%d C\n", temperature_sensor.value(0)/10, temperature_sensor.value(0)%10);
+=======
+#ifdef X_NUCLEO_IKS01A1
+    printf("LEDs status:\tRED:n/a GREEN:%s\n", leds_get() & LEDS_GREEN ? "on" : "off");
+#else
+    printf("LEDs status:\tRED:%s GREEN:%s\n", leds_get() & LEDS_RED ? "on" : "off",
+           leds_get() & LEDS_GREEN ? "on" : "off");
+#endif /*X_NUCLEO_IKS01A1*/
+    sensor_value = radio_sensor.value(RADIO_SENSOR_LAST_PACKET);
+    printf("Radio (RSSI):\t%d.%d dBm\n", sensor_value / 10, ABS_VALUE(sensor_value) % 10);
+    printf("Radio (LQI):\t%d\n", radio_sensor.value(RADIO_SENSOR_LAST_VALUE));
+
+#ifdef X_NUCLEO_IKS01A1
+    sensor_value = temperature_sensor.value(0);
+    printf("Temperature:\t%d.%d C\n", sensor_value / 10, ABS_VALUE(sensor_value) % 10);
+>>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
 
     printf("Humidity:\t%d.%d rH\n", humidity_sensor.value(0)/10, humidity_sensor.value(0)%10);
 
@@ -159,9 +181,15 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
                                                    acceleration_sensor.value(Z_AXIS));
 
     printf("Gyroscope:\t%d/%d/%d (X/Y/Z) mdps\n", gyroscope_sensor.value(X_AXIS),
+<<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
                                                   gyroscope_sensor.value(Y_AXIS),
                                                   gyroscope_sensor.value(Z_AXIS));
 #endif
+=======
+           gyroscope_sensor.value(Y_AXIS),
+           gyroscope_sensor.value(Z_AXIS));
+#endif /*X_NUCLEO_IKS01A1*/
+>>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
 
     printf ("\n");
   }
