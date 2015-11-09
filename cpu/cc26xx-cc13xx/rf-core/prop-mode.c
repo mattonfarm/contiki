@@ -641,6 +641,7 @@ static int
 transmit(unsigned short transmit_len)
 {
   int ret;
+  uint8_t was_off = 0;
   uint32_t cmd_status;
   volatile rfc_CMD_PROP_TX_ADV_t *cmd_tx_adv;
 
@@ -648,6 +649,7 @@ transmit(unsigned short transmit_len)
   uint16_t total_length;
 
   if(!rf_is_on()) {
+    was_off = 1;
     if(on() != RF_CORE_CMD_OK) {
       PRINTF("transmit: on() failed\n");
       return RADIO_TX_ERR;
@@ -732,6 +734,10 @@ transmit(unsigned short transmit_len)
   cmd_tx_adv->status = RF_CORE_RADIO_OP_STATUS_IDLE;
 
   rx_on_prop();
+
+  if(was_off) {
+    off();
+  }
 
   return ret;
 }
