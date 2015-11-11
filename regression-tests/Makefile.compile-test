@@ -41,6 +41,7 @@ define dooneexample
 @echo Building example $(3): $(1) for target $(2)
 @((cd $(EXAMPLESDIR)/$(1); \
  export STM32W_CPUREV=CC; \
+<<<<<<< f324a161c3af0dd965d9ce7b0af84858844b24fb
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 <<<<<<< 7a112257e7b18295af53eb04dbbf1dae8d8372d8
  export USE_SUBGHZ_BOARD=IDS01A5; \
@@ -49,6 +50,8 @@ define dooneexample
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
  make TARGET=$(2) clean && make TARGET=$(2)) > \
 =======
+=======
+>>>>>>> Added default BOARD value to let regression tests compile for any platform.
  make TARGET=$(2) clean && make TARGET=$(2) WERROR=1) > \
 >>>>>>> Build examples with the WERROR=1 flag passed to make, to ensure that we have a clean non-warning build for all examples on platforms that support the WERROR=1 flag
       $(3)-$(subst /,-,$(1))$(2).report 2>&1 && \
