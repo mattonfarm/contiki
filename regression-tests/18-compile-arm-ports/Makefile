@@ -18,6 +18,7 @@ cc2538dk/udp-ipv6-echo-server/cc2538dk \
 cc2538dk/sniffer/cc2538dk \
 cc2538dk/mqtt-demo/cc2538dk \
 ipv6/multicast/cc2538dk \
+<<<<<<< 55c1622aa17ff8a23b30e398a24672a16da718b6
 <<<<<<< 5d5d594b6a29bd5da4ed808f6cf5b6b617ada037
 er-rest-example/stm32nucleo-spirit1 \
 ipv6/rpl-border-router/stm32nucleo-spirit1 \
@@ -31,6 +32,9 @@ hello-world/stm32nucleo-spirit1 \
 =======
 >>>>>>> Undo travis-breaking change
 zolertia/zoul \
+=======
+zolertia/zoul/zoul \
+>>>>>>> Fixed regression test for the zoul platform
 zolertia/zoul/cc1200-demo/zoul \
 er-rest-example/zoul \
 hello-world/zoul \
