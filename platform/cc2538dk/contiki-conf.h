@@ -518,9 +518,12 @@ typedef uint32_t rtimer_clock_t;
 #endif
 /** @} */
 /*---------------------------------------------------------------------------*/
+<<<<<<< HEAD
 
 #define RDC_CONF_HARDWARE_CSMA 1
 #define RDC_CONF_HARDWARE_ACK  0
+=======
+>>>>>>> refs/remotes/contiki-os/master
 
 #endif /* CONTIKI_CONF_H_ */
 

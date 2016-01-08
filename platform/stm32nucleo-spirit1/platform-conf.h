@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 /**
 ******************************************************************************
@@ -114,6 +115,8 @@ typedef unsigned short  uip_stats_t;
  * @}
  */
 =======
+=======
+>>>>>>> refs/remotes/contiki-os/master
 /*
  * Copyright (c) 2012, STMicroelectronics.
  * All rights reserved.
@@ -223,4 +226,7 @@ typedef unsigned short uip_stats_t;
  * @}
  * @}
  */
+<<<<<<< HEAD
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
+=======
+>>>>>>> refs/remotes/contiki-os/master

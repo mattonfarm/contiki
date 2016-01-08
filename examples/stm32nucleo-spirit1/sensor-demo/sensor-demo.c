@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< 723e1c2feea4cd4d0ab7192c7ddc2152fac98996
 /**
 ******************************************************************************
@@ -39,6 +40,8 @@
  * \file
  *         A very simple Contiki application showing sensor values for ST Nucleo
 =======
+=======
+>>>>>>> refs/remotes/contiki-os/master
 /*
  * Copyright (c) 2012, STMicroelectronics.
  * All rights reserved.
@@ -68,7 +71,10 @@
  * SUCH DAMAGE.
  *
  *
+<<<<<<< HEAD
 >>>>>>> Fix to sensor-demo license and Readme file.
+=======
+>>>>>>> refs/remotes/contiki-os/master
  */
 /*---------------------------------------------------------------------------*/
 #include "contiki.h"
@@ -81,6 +87,13 @@
 
 #include "dev/button-sensor.h"
 #include "dev/leds.h"
+<<<<<<< HEAD
+=======
+#include "dev/radio-sensor.h"
+#include "dev/sensor-common.h"
+
+#include "st-lib.h"
+>>>>>>> refs/remotes/contiki-os/master
 
 #ifdef X_NUCLEO_IKS01A1
 #include "dev/temperature-sensor.h"
@@ -94,7 +107,11 @@
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
 
+<<<<<<< HEAD
 #define PRINT_INTERVAL 5*CLOCK_SECOND
+=======
+#define PRINT_INTERVAL 5 * CLOCK_SECOND
+>>>>>>> refs/remotes/contiki-os/master
 
 /*---------------------------------------------------------------------------*/
 PROCESS(sensor_demo_process, "Sensor demo process");
@@ -104,12 +121,17 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 {
   static struct etimer etimer;
   static unsigned long _button_pressed;
+<<<<<<< HEAD
+=======
+  static int sensor_value = 0;
+>>>>>>> refs/remotes/contiki-os/master
 
   PROCESS_BEGIN();
   PROCESS_PAUSE();
 
   SENSORS_ACTIVATE(button_sensor);
 
+<<<<<<< HEAD
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 #ifdef COMPILE_SENSORS
 =======
@@ -117,6 +139,11 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 
 #ifdef X_NUCLEO_IKS01A1
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
+=======
+  SENSORS_ACTIVATE(radio_sensor);
+
+#ifdef X_NUCLEO_IKS01A1
+>>>>>>> refs/remotes/contiki-os/master
   SENSORS_ACTIVATE(temperature_sensor);
   SENSORS_ACTIVATE(humidity_sensor);
   SENSORS_ACTIVATE(pressure_sensor);
@@ -125,6 +152,7 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
   SENSORS_ACTIVATE(gyroscope_sensor);
 #endif /*X_NUCLEO_IKS01A1*/
 
+<<<<<<< HEAD
   while(1)
   {
     etimer_set(&etimer, PRINT_INTERVAL);
@@ -132,12 +160,20 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
     PROCESS_WAIT_EVENT();
     if (ev == sensors_event && data == &button_sensor)
     {
+=======
+  while(1) {
+    etimer_set(&etimer, PRINT_INTERVAL);
+
+    PROCESS_WAIT_EVENT();
+    if(ev == sensors_event && data == &button_sensor) {
+>>>>>>> refs/remotes/contiki-os/master
       printf("Sensor event detected: Button Pressed.\n\n");
       printf("Toggling Leds\n");
       _button_pressed++;
       leds_toggle(LEDS_ALL);
     }
 
+<<<<<<< HEAD
 
     printf("Button state:\t%s (pressed %lu times)\n", button_sensor.value(0)?"Released":"Pressed",
                                                       _button_pressed);
@@ -153,6 +189,11 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 #ifdef COMPILE_SENSORS
     printf("Temperature:\t%d.%d C\n", temperature_sensor.value(0)/10, temperature_sensor.value(0)%10);
 =======
+=======
+    printf("Button state:\t%s (pressed %lu times)\n", button_sensor.value(0) ? "Released" : "Pressed",
+           _button_pressed);
+
+>>>>>>> refs/remotes/contiki-os/master
 #ifdef X_NUCLEO_IKS01A1
     printf("LEDs status:\tRED:n/a GREEN:%s\n", leds_get() & LEDS_GREEN ? "on" : "off");
 #else
@@ -166,6 +207,7 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
 #ifdef X_NUCLEO_IKS01A1
     sensor_value = temperature_sensor.value(0);
     printf("Temperature:\t%d.%d C\n", sensor_value / 10, ABS_VALUE(sensor_value) % 10);
+<<<<<<< HEAD
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
 
     printf("Humidity:\t%d.%d rH\n", humidity_sensor.value(0)/10, humidity_sensor.value(0)%10);
@@ -194,6 +236,36 @@ PROCESS_THREAD(sensor_demo_process, ev, data)
     printf ("\n");
   }
   
+=======
+
+    sensor_value = humidity_sensor.value(0);
+    printf("Humidity:\t%d.%d rH\n", sensor_value / 10, ABS_VALUE(sensor_value) % 10);
+
+    sensor_value = pressure_sensor.value(0);
+    printf("Pressure:\t%d.%d mbar\n", sensor_value / 10, ABS_VALUE(sensor_value) % 10);
+
+    /* NOTE: this demo uses the mapping of ST Nucleo sensors on Contiki sensor API.
+     * For a real use case of sensors like acceleration, magneto and gyroscope,
+     * it is better to directly call the ST lib to get the three value (X/Y/Z)
+     * at once.
+     */
+    printf("Magneto:\t%d/%d/%d (X/Y/Z) mgauss\n", magneto_sensor.value(X_AXIS),
+           magneto_sensor.value(Y_AXIS),
+           magneto_sensor.value(Z_AXIS));
+
+    printf("Acceleration:\t%d/%d/%d (X/Y/Z) mg\n", acceleration_sensor.value(X_AXIS),
+           acceleration_sensor.value(Y_AXIS),
+           acceleration_sensor.value(Z_AXIS));
+
+    printf("Gyroscope:\t%d/%d/%d (X/Y/Z) mdps\n", gyroscope_sensor.value(X_AXIS),
+           gyroscope_sensor.value(Y_AXIS),
+           gyroscope_sensor.value(Z_AXIS));
+#endif /*X_NUCLEO_IKS01A1*/
+
+    printf("\n");
+  }
+
+>>>>>>> refs/remotes/contiki-os/master
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/

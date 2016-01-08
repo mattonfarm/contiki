@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 /**
 ******************************************************************************
@@ -120,6 +121,8 @@ SENSORS_SENSOR(humidity_sensor, HUMIDITY_SENSOR, value, configure, status);
 /*---------------------------------------------------------------------------*/
 /** @} */
 =======
+=======
+>>>>>>> refs/remotes/contiki-os/master
 /*
  * Copyright (c) 2012, STMicroelectronics.
  * All rights reserved.
@@ -242,4 +245,7 @@ SENSORS_SENSOR(humidity_sensor, HUMIDITY_SENSOR, value, configure, status);
 #endif /*X_NUCLEO_IKS01A1*/
 /*---------------------------------------------------------------------------*/
 /** @} */
+<<<<<<< HEAD
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
+=======
+>>>>>>> refs/remotes/contiki-os/master

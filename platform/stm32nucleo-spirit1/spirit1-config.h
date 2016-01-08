@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< 8721b7aa7b2034d3ca5039ab8b805636336261a3
 /*
  * Copyright (c) 2012, STMicroelectronics.
@@ -59,6 +60,8 @@
 #endif /* __SPIRIT1_CONFIG_H__ */
 /*---------------------------------------------------------------------------*/
 =======
+=======
+>>>>>>> refs/remotes/contiki-os/master
 /*
  * Copyright (c) 2012, STMicroelectronics.
  * All rights reserved.
@@ -118,4 +121,7 @@
 /*---------------------------------------------------------------------------*/
 #endif /* __SPIRIT1_CONFIG_H__ */
 /*---------------------------------------------------------------------------*/
+<<<<<<< HEAD
 >>>>>>> Modified radio parameters to increase communication range.
+=======
+>>>>>>> refs/remotes/contiki-os/master

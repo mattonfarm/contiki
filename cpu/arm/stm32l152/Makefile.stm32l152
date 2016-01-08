@@ -25,7 +25,11 @@ CONTIKI_CPU_ARCH=   watchdog.c                                \
                     clock.c				      
 
 ifdef GCC 
+<<<<<<< HEAD
 CONTIKI_CPU_PORT=   sysmem.c                                  \
+=======
+CONTIKI_CPU_PORT=   syscalls.c                                  \
+>>>>>>> refs/remotes/contiki-os/master
 		    console.c				      \
                     crt.c				      \
                     uart.c                                    

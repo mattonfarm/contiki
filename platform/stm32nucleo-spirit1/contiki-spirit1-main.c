@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 /**
 ******************************************************************************
@@ -195,6 +196,8 @@ static void set_rime_addr(void)
 /*---------------------------------------------------------------------------*/
 /** @} */
 =======
+=======
+>>>>>>> refs/remotes/contiki-os/master
 /*
  * Copyright (c) 2012, STMicroelectronics.
  * All rights reserved.
@@ -390,4 +393,7 @@ set_rime_addr(void)
 }
 /*---------------------------------------------------------------------------*/
 /** @} */
+<<<<<<< HEAD
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
+=======
+>>>>>>> refs/remotes/contiki-os/master

@@ -75,6 +75,7 @@ Software Requirements
 The following software are needed:
 
 * ST port of Contiki for STM32 Nucleo and expansion boards. 
+<<<<<<< HEAD
  >The port is installed automatically when both the Contiki and the submodule repository are cloned: the former hosts the Contiki distribution and the ST platform interface, the latter hosts the actual library.
 The following commands are needed to download the full porting:
 
@@ -86,6 +87,20 @@ The following commands are needed to download the full porting:
 (*): required only if using the STclab GitHub repository, these steps won't be needed once the Pull Request will be accepted
 
 
+=======
+ 
+ >The port is automatically installed when both the Contiki and the submodule repository are cloned: the former hosts the Contiki distribution and the ST platform interface, the latter hosts the actual library. The following commands are needed to download the full porting: 
+
+	git clone https://github.com/STclab/contiki.git
+	cd contiki/
+	git checkout stm32nucleo-spirit1
+	git submodule init
+	git submodule update
+
+
+Note: the first and third steps are required only if using the STclab GitHub repository, they won't be needed any more once the Pull Request is accepted.
+
+>>>>>>> refs/remotes/contiki-os/master
 The platform name is: stm32nucleo-spirit1
 
 * A toolchain to build the firmware: The port has been developed and tested with GNU Tools 

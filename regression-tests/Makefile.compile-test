@@ -42,6 +42,7 @@ get_target_vars = $(wordlist 2,15,$(subst :, ,$1))
 define dooneexample
 @echo Building example $(3): $(1) $(4) for target $(2)
 @((cd $(EXAMPLESDIR)/$(1); \
+<<<<<<< HEAD
 <<<<<<< 118ed55b6bde244454bd6e5bcb00ccd3c42740f9
  export STM32W_CPUREV=CC; \
 <<<<<<< df97a4761bbb96884fdf9643903160df46ed9fd0
@@ -63,6 +64,9 @@ define dooneexample
 >>>>>>> Moved STM32W_CPUREV to the relevant compile regression test
  make $(4) TARGET=$(2) clean && make $(4) TARGET=$(2) WERROR=1) > \
 >>>>>>> Added option to specify make variables in the compile regression test
+=======
+ make $(4) TARGET=$(2) clean && make $(4) TARGET=$(2) WERROR=1) > \
+>>>>>>> refs/remotes/contiki-os/master
       $(3)-$(subst /,-,$(1))$(2).report 2>&1 && \
  (echo $(1) $(2): OK | tee $(3)-$(subst /,-,$(1))$(2).summary) || \
  (echo $(1) $(2): FAIL ಠ.ಠ | tee $(3)-$(subst /,-,$(1))$(2).summary ; \

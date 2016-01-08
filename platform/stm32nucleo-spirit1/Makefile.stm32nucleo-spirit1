@@ -57,6 +57,7 @@ CONTIKI_TARGET_DIRS += stm32cube-lib/drivers/STM32L1xx_HAL_Driver/Src
 CONTIKI_TARGET_DIRS += stm32cube-lib/drivers/STM32L1xx_HAL_Driver/Inc
 
 
+<<<<<<< HEAD
 <<<<<<< 52a518e29566af92521182f6d978eff312a4e15f
 ifeq ($(COMPILE_SENSORS),TRUE)
 CONTIKI_TARGET_DIRS += stm32cube-lib/drivers/x_nucleo_iks01a1
@@ -69,6 +70,9 @@ ARCH_DEV = button-sensor.c leds-arch.c
 =======
 ARCH_DEV = button-sensor.c leds-arch.c radio-sensor.c
 >>>>>>> Compilation flags update: BOARD=ids01a4/5 SENSORBOARD=iks01a1
+=======
+ARCH_DEV = button-sensor.c leds-arch.c radio-sensor.c
+>>>>>>> refs/remotes/contiki-os/master
 
 ARCH_NUCLEOSPIRIT1 = contiki-spirit1-main.c  uart-msg.c  spirit1-arch.c  spirit1.c node-id.c
 
