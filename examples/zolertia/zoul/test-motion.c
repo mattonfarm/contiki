@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Zolertia - http://www.zolertia.com
+ * Copyright (c) 2016, Zolertia - http://www.zolertia.com
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,84 +32,71 @@
  * \addtogroup zoul-examples
  * @{
  *
- * \defgroup zoul-tsl2563-test TSL2563 light sensor test
+ * \defgroup zoul-motion-test Digital motion sensor test
  *
- * Demonstrates the use of the TSL2563 digital ambient light sensor
+ * The example application shows how to use any digital motion sensor, basically
+ * driving a signal high when motion is detected.
+ *
  * @{
  *
  * \file
- *  Driver for the external TSL2563 light sensor
+ *  Test application for the digital motion/presence sensor
  *
  * \author
  *         Antonio Lignan <alinan@zolertia.com>
- *         Toni Lozano <tlozano@zolertia.com>
  */
 /*---------------------------------------------------------------------------*/
-#include <stdio.h>
 #include "contiki.h"
-#include "dev/i2c.h"
+#include "cpu.h"
+#include "sys/rtimer.h"
 #include "dev/leds.h"
-#include "dev/tsl2563.h"
+#include "dev/motion-sensor.h"
+
+#include <stdio.h>
+#include <stdint.h>
 /*---------------------------------------------------------------------------*/
-/* Default sensor's integration cycle is 402ms */
-#define SENSOR_READ_INTERVAL (CLOCK_SECOND)
+#define LEDS_OFF_HYSTERISIS      RTIMER_SECOND
 /*---------------------------------------------------------------------------*/
-PROCESS(remote_tsl2563_process, "TSL2563 test process");
-AUTOSTART_PROCESSES(&remote_tsl2563_process);
+static struct rtimer rt;
 /*---------------------------------------------------------------------------*/
-static struct etimer et;
+PROCESS(test_presence_sensor, "Test digital motion sensor");
+AUTOSTART_PROCESSES(&test_presence_sensor);
 /*---------------------------------------------------------------------------*/
 void
-light_interrupt_callback(uint8_t value)
+rt_callback(struct rtimer *t, void *ptr)
 {
-  printf("* Light sensor interrupt!\n");
-  leds_toggle(LEDS_PURPLE);
+  leds_off(LEDS_RED);
 }
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(remote_tsl2563_process, ev, data)
+static void
+presence_callback(uint8_t value)
+{
+  printf("*** Presence detected!\n");
+  leds_on(LEDS_RED);
+  rtimer_set(&rt, RTIMER_NOW() + LEDS_OFF_HYSTERISIS, 1, rt_callback, NULL);
+}
+/*---------------------------------------------------------------------------*/
+PROCESS_THREAD(test_presence_sensor, ev, data)
 {
   PROCESS_BEGIN();
-  static uint16_t light;
 
-  /* Use Contiki's sensor macro to enable the sensor */
-  SENSORS_ACTIVATE(tsl2563);
+  /* Register the callback handler when presence is detected */
+  MOTION_REGISTER_INT(presence_callback);
 
-  /* Default integration time is 402ms with 1x gain, use the below call to
-   * change the gain and timming, see tsl2563.h for more options
+  /* Enable the sensor, as default it assumes the signal pin has a pull-down
+   * resistor and a rising interrupt (signal goes high when motion is detected),
+   * this is the case of the Grove's PIR sensor v.1.0.  If the sensor has an
+   * inverse logic, change at the motion-sensor.c driver file
+   * GPIO_DETECT_FALLING instead of GPIO_DETECT_RISING if using an external
+   * pull-up resistor
    */
-  /* tsl2563.configure(TSL2563_TIMMING_CFG, TSL2563_G16X_402MS); */
+  SENSORS_ACTIVATE(motion_sensor);
 
-  /* Register the interrupt handler */
-  TSL2563_REGISTER_INT(light_interrupt_callback);
-
-  /* Enable the interrupt source for values over the threshold.  The sensor
-   * compares against the value of CH0, one way to find out the required
-   * threshold for a given lux quantity is to enable the DEBUG flag and see
-   * the CH0 value for a given measurement.  The other is to reverse the
-   * calculations done in the calculate_lux() function.  The below value roughly
-   * represents a 2500 lux threshold, same as pointing a flashlight directly
-   */
-  tsl2563.configure(TSL2563_INT_OVER, 0x15B8);
-
-  /* And periodically poll the sensor */
-
-  while(1) {
-    etimer_set(&et, SENSOR_READ_INTERVAL);
-    PROCESS_WAIT_EVENT_UNTIL(etimer_expired(&et));
-    light = tsl2563.value(TSL2563_VAL_READ);
-    if(light != TSL2563_ERROR) {
-      printf("Light = %u\n", (uint16_t)light);
-    } else {
-      printf("Error, enable the DEBUG flag in the tsl2563 driver for info, ");
-      printf("or check if the sensor is properly connected\n");
-      PROCESS_EXIT();
-    }
-  }
   PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
 /**
  * @}
  * @}
+ * @}
  */
-

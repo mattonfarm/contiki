@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005, Swedish Institute of Computer Science
+ * Copyright (c) 2015, Zolertia <http://www.zolertia.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,27 +29,48 @@
  * This file is part of the Contiki operating system.
  *
  */
-
+/*---------------------------------------------------------------------------*/
 /**
+ * \addtogroup zoul-sensors
+ * @{
+ *
+ * \defgroup zoul-motion-sensor Digital motion sensor
+ * @{
+ *
  * \file
- *         Header file for debugging functions used by the CC2530DK port.
- *
- *         putstring() and puthex() are from msp430/watchdog.c
- *
+ *         Digital motion sensor header file
  * \author
- *         George Oikonomou - <oikonomou@users.sourceforge.net>
+ *         Antonio Lignan <alinan@zolertia.com>
  */
-
-#ifndef DEBUG_H_
-#define DEBUG_H_
-
-#include "8051def.h"
-#include "dev/uart1.h"
-
-void putchar(char c);
-void putstring(char *s);
-void puthex(uint8_t c);
-void putbin(uint8_t c);
-void putdec(uint8_t c);
-
-#endif /* DEBUG_H_ */
+/*---------------------------------------------------------------------------*/
+#include "lib/sensors.h"
+/* -------------------------------------------------------------------------- */
+#ifndef SHT25_H_
+#define SHT25_H_
+/* -------------------------------------------------------------------------- */
+/**
+ * \name Motion sensor return and operation values
+ * @{
+ */
+#define MOTION_ACTIVE     SENSORS_ACTIVE
+#define MOTION_SUCCESS    0
+#define MOTION_ERROR      (-1)
+/** @} */
+/* -------------------------------------------------------------------------- */
+/**
+ * \name Motion sensor interrupt callback macro
+ * @{
+ */
+#define MOTION_REGISTER_INT(ptr) presence_int_callback = ptr;
+extern void (*presence_int_callback)(uint8_t value);
+/** @} */
+/* -------------------------------------------------------------------------- */
+#define MOTION_SENSOR "Digital motion sensor"
+/* -------------------------------------------------------------------------- */
+extern const struct sensors_sensor motion_sensor;
+/* -------------------------------------------------------------------------- */
+#endif /* ifndef MOTION_SENSOR_H_ */
+/**
+ * @}
+ * @}
+ */
