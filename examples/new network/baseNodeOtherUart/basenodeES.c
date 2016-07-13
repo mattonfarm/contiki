@@ -21,6 +21,7 @@
 #include "dev/leds.h"
 #include "dev/uart.h"
 #include "net/ipv6/sicslowpan.h"
+#include "core/dev/watchdog.h"
 
 #define false 0
 #define true 1
@@ -166,7 +167,6 @@ static void process_line(void)
 {
 	uint8_t addrToSend1, addrToSend2, addrToSend3, addrToSend4;
 	uip_ip6addr_t sendTo;
-  static int seq_id;
 	char NodeAddress[20];
 	
 	if (strncmp(usart_rx_buffer,"?",1) == 0)
