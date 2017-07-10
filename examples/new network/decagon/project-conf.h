@@ -8,5 +8,5 @@
 
 #define UART1_CONF_UART 1
 
-#define LPM_CONF_ENABLE 0
+#define LPM_CONF_ENABLE 1
 //#define DBG_CONF_UART 0

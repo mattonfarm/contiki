@@ -93,7 +93,7 @@
 #define NETSTACK_CONF_RADIO        prop_mode_driver
 
 #ifndef RF_CORE_CONF_CHANNEL
-#define RF_CORE_CONF_CHANNEL                      0
+#define RF_CORE_CONF_CHANNEL                      26
 #endif
 
 #define NULLRDC_CONF_ACK_WAIT_TIME                (RTIMER_SECOND / 400)
@@ -111,7 +111,7 @@
 #define NETSTACK_CONF_RADIO        ieee_mode_driver
 
 #ifndef RF_CORE_CONF_CHANNEL
-#define RF_CORE_CONF_CHANNEL                     25
+#define RF_CORE_CONF_CHANNEL                     26
 #endif
 
 #define NULLRDC_CONF_802154_AUTOACK_HW            1
@@ -260,7 +260,7 @@
  * @{
  */
 #ifndef CC26XX_UART_CONF_ENABLE
-#define CC26XX_UART_CONF_ENABLE            1 /**< Enable/Disable UART I/O */
+#define CC26XX_UART_CONF_ENABLE            0 /**< Enable/Disable UART I/O */
 #endif
 
 #ifndef CC26XX_UART_CONF_BAUD_RATE
@@ -269,7 +269,7 @@
 
 /* Enable I/O over the Debugger Devpack - Only relevant for the SensorTag */
 #ifndef BOARD_CONF_DEBUGGER_DEVPACK
-#define BOARD_CONF_DEBUGGER_DEVPACK        1
+#define BOARD_CONF_DEBUGGER_DEVPACK        0
 #endif
 
 /* Turn off example-provided putchars */
@@ -299,7 +299,7 @@
 #endif
 
 /* Notify various examples that we have Buttons */
-#define PLATFORM_HAS_BUTTON      1
+#define PLATFORM_HAS_BUTTON      0
 
 /*
  * Override button symbols from dev/button-sensor.h, for the examples that

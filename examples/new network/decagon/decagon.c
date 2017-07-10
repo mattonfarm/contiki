@@ -97,7 +97,7 @@ int usart1_rx_buffer_index = 0;										//And an index for that buffer
 
 unsigned char channel = 0x19;										//Set the RF channel to 0x19 by default			
 unsigned char client[11] = {0,0,0,0,0,0,0,0,0,0,0};					//Declare a variable to store the client name (used as a reference only)
-unsigned int MeasurementPeriod = 60;								//Default measurement period = 1 min
+unsigned int MeasurementPeriod = 30;								//Default measurement period = 1 min
 
 char OneWireDeviceFound;											//True if we found one wire devices on the bus after a prescence pulse
 //Declare a variable to store one wire temperature sensor addresses
@@ -499,7 +499,7 @@ void ReadFromEEPROM(void) {
 	SPI_WRITE(MEASUREMENTPERIOD_ADDR);						//Read address for Measurement Period
 	SPI_FLUSH();
 	SPI_READ(MeasurementPeriod);
-	MeasurementPeriod = 60;
+	MeasurementPeriod = 30;
 	watchdog_periodic();
 	SPI_WAITFORTx_AFTER();
 	SPI_CS_SET(GPIO_B_NUM, 1);
@@ -939,6 +939,7 @@ static void decagon_line(void) {
 	}
 	usart1_rx_buffer_index = 0;
 	usart1_rx_buffer[0] = '\0';
+	lpm_set_max_pm(LPM_CONF_MAX_PM);
 	//Reset the UART buffer and return from the process line function
 }
 
@@ -1089,7 +1090,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	GPIO_SET_INPUT(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(5));				//Set PORTC.5 as input
 	GPIO_CLR_PIN(GPIO_PORT_TO_BASE(GPIO_C_NUM), GPIO_PIN_MASK(5));					//No pull-up
 	
-	NETSTACK_MAC.off(1);
+	//NETSTACK_MAC.off(1);
 	
 	 PROCESS_PAUSE();
 
@@ -1120,8 +1121,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	uart_set_input(1,uart1_rx_callback);
 	
 	etimer_set(&periodic, SEND_INTERVAL);											//Set up an event timer to send data back to base at a set interval
-	watchdog_periodic();															//Feed the doge
-	
+
 	//Enable high gain mode on cc2592
 	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));			
 	GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_D_NUM), GPIO_PIN_MASK(2));
@@ -1137,6 +1137,8 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 		watchdog_periodic();						//Give the dog some food
 		printf("Prepare Packet\r");					//Debug message
 		
+		lpm_set_max_pm(0);
+		clock_delay_usec(10);
 		//Turn on Soil Moisture Sensors (PORTB.5)
 	//	GPIO_SET_OUTPUT(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));
 		GPIO_SET_PIN(GPIO_PORT_TO_BASE(GPIO_B_NUM), GPIO_PIN_MASK(5));

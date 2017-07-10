@@ -1,3 +1,6 @@
 #define UART0_CONF_BAUD_RATE 38400
+#define DBG_CONF_UART 0
 
-#define LPM_CONF_ENABLE 0
+#define UART1_CONF_UART 0
+
+#define LPM_CONF_ENABLE 1

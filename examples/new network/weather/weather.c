@@ -71,7 +71,7 @@ static int weather_rx_buffer_index = 0;
 static char StringBuffer[MAX_PAYLOAD_LEN];
 
 unsigned char channel = 25;
-unsigned int MeasurementPeriod = 15;			//Default measurement period = 1 min
+unsigned int MeasurementPeriod = 300;			//Default measurement period = 1 min
 char TimeoutCount = 0;
 bool WaitingResponse;
 

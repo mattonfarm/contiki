@@ -94,7 +94,6 @@
 #include "button-sensor.h"
 #include "batmon-sensor.h"
 #include "board-peripherals.h"
-#include "cc26xx-rf.h"
 #include "net/ip/uip.h"
 #include "net/ipv6/uip-ds6.h"
 #include "net/ip/uip-udp-packet.h"
@@ -134,7 +133,7 @@
 #define UDP_SERVER_PORT 5678
 
 #define UDP_EXAMPLE_ID  190
-#define MAX_PAYLOAD_LEN		250
+#define MAX_PAYLOAD_LEN		150
 /*---------------------------------------------------------------------------*/
 static struct etimer et;
 /*---------------------------------------------------------------------------*/

@@ -43,7 +43,7 @@
 
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE    8
 
-#define CC26XX_UART_CONF_ENABLE 0
+#define CC26XX_UART_CONF_ENABLE 1
 /*---------------------------------------------------------------------------*/
 #endif /* PROJECT_CONF_H_ */
 /*---------------------------------------------------------------------------*/

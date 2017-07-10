@@ -82,7 +82,7 @@ int usart_rx_buffer_index = 0;										//And an index for that buffer
 
 unsigned char channel = 0x19;										//Set the RF channel to 0x19 by default			
 unsigned char client[11] = {0,0,0,0,0,0,0,0,0,0,0};					//Declare a variable to store the client name (used as a reference only)
-unsigned int MeasurementPeriod = 30;								//Default measurement period = 1 min
+unsigned int MeasurementPeriod = 300;								//Default measurement period = 1 min
 
 char OneWireDeviceFound;											//True if we found one wire devices on the bus after a prescence pulse
 //Declare a variable to store one wire temperature sensor addresses
@@ -139,7 +139,7 @@ void send_message(void* ptr) {
 	char StringBuffer[MAX_PAYLOAD_LEN];				//Buffer for building the string of readings sent over the wireless network
 	watchdog_periodic();				//Feed the dog
 	int32_t value;						//Temporary variable for storing ADC readings. 32bit as readings are averaged
-	unsigned char CRC, i;				//Temporary variables for storing string CRC and for loop index
+	unsigned char i;				//Temporary variables for storing for loop index
     static int seq_id;
 	
 	printf("ADC Set\r");				//Print debug to UART
@@ -270,7 +270,7 @@ unsigned char ConvertASCIICharToHex(char ASCII) {
 //Used to process a full carridge return terminated string received through the serial UART
 static void process_line(void) {
 	unsigned char ctr;									//FOR loop index
-	watchdog_periodic();								//Woof woof bitches
+	watchdog_periodic();								
 	if (strncmp(usart_rx_buffer,"?",1) == 0) {			//If we received a "?" in position 1, the device connected to the UART wants information about the node
 		ReadFromEEPROM();								//Read settings from EEPROM - the ReadFromEEPROM function will send out the data
 	}
@@ -421,7 +421,7 @@ int uart_rx_callback(unsigned char c) {
 //Function from reading values from the AT25040B SPI EEPROM
 //After reading values are output from the serial UART (debug interface)
 void ReadFromEEPROM(void) {
-	watchdog_periodic();									//Give the dog a bone - we don't want him to bark now
+	watchdog_periodic();									
 	int i, j;												//For loop counters	
 	spix_set_mode(0,SSI_CR0_FRF_MOTOROLA, 0, 0, 8);			//Set the SPI bus in motorolla mode 0,0, 8 bit
 	spix_enable(0);		
@@ -462,7 +462,7 @@ void ReadFromEEPROM(void) {
 	SPI_WRITE(MEASUREMENTPERIOD_ADDR);						//Read address for Measurement Period
 	SPI_FLUSH();
 	SPI_READ(MeasurementPeriod);
-	MeasurementPeriod = 30;
+	MeasurementPeriod = 300;
 	watchdog_periodic();
 	SPI_WAITFORTx_AFTER();
 	SPI_CS_SET(GPIO_B_NUM, 1);
@@ -944,7 +944,7 @@ PROCESS_THREAD(example_mesh_process, ev, data)
 	//NETSTACK_RADIO.set_value(RADIO_PARAM_CHANNEL, channel);		//Set the radio channel to the value read from SPI EEPROM (this will default to 0x19 if invalid)
 	//printf("On channel %d\r",channel);							//Debug message
 	
-	NETSTACK_MAC.off(1);
+	//NETSTACK_MAC.off(1);
 	
 	sprintf(ThisNodeAddress, "SO %03u.%03u", linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1]);	//Debug message printing node address
 

@@ -535,7 +535,9 @@ init(void)
   
   //Set PA (PC6) as output
   REG(RFCORE_XREG_RFC_OBSSEL6) = 0x00000081;								//Connect OBS_CTRL0 to PC6
-  REG(RFCORE_XREG_RFC_OBSSEL3) = 0x00000081;								//Connect PC3 to PA enable
+  REG(RFCORE_XREG_RFC_OBSSEL3) = 0x00000081;	
+REG(RFCORE_XREG_RFC_OBSSEL1) = 0x00000081;	  
+  //Connect PC3 to PA enable
   
   //Set LNA (PC7) as output
   REG(RFCORE_XREG_RFC_OBSSEL7) = 0x00000080;								//Connect RF_OBS_CTRL1 to PC7
